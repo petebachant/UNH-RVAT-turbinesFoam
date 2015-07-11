@@ -1,0 +1,186 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvOptions;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+turbine
+{
+    type            crossFlowTurbineALSource;
+    active          on;
+    selectionMode   cellSet; // cellSet || points || cellZone
+    cellSet         turbine;
+
+    crossFlowTurbineALSourceCoeffs
+    {
+        fieldNames          (U);
+        origin              (0 0 0);
+        axis                (0 0 1);    // Negative for opposite rotation
+        rotorRadius         0.5;
+        tipEffect           0.95; 
+        freeStreamVelocity  (1 0 0);
+        tipSpeedRatio       1.9;
+        tsrAmplitude        0.19;       // Amplitude for TSR oscillation
+        tsrPhase            0.70;       // Angle of first peak (rad)
+        
+        dynamicStall
+        {
+            active              on;
+            dynamicStallModel   LeishmanBeddoesSGC;
+            LeishmanBeddoesCoeffs
+            {
+                A1          0.3;        // Default = 0.3
+                A2          0.7;        // Default = 0.7
+                b1          0.14;       // Default = 0.14
+                b2          0.53;       // Default = 0.53
+                eta         0.95;       // Default = 0.95
+                Tp          1.7;        // Default = 1.7
+                Tf          3.0;        // Default = 3.0
+                Tv          6.0;        // Default = 6.0
+                Tvl         7.0;        // Default = 7.0
+            }
+            LeishmanBeddoes3GCoeffs
+            {
+                Tp          1.7;        // Default = 1.7
+                Tf          3.0;        // Default = 3.0
+                T1          20;         // Default = 20
+                T2          4.5;        // Default = 4.5
+                Tv          10.0;       // Default = 10.0
+                Tvl         8.0;        // Default = 8.0
+                A1          0.165;      // Default = 0.165
+                A2          0.335;      // Default = 0.335
+                A3          0.5;        // Default = 0.5
+                eta         0.95;       // Default = 0.95
+            }
+            LeishmanBeddoesSGCCoeffs
+            {
+                Tp          1.7;        // Default = 1.7
+                Tf          3.0;        // Default = 3.0
+                TAlpha      6.25;
+                alphaDS0DiffDeg 3.8;
+                r0          0.01;
+                Tv          11;
+                Tvl         8.7;
+                B1          0.5;
+                eta         0.98;
+                E0          0.16;
+            }
+        }
+        
+        flowCurvature
+        {
+            active              on;
+            flowCurvatureModel  Goude; // Goude || MandalBurton
+        }
+
+        blades
+        {
+            blade1
+            {
+                writePerf   true;
+                nElements   14;
+                profile     NACA0020;
+                elementData
+                ( // axialDistance, radius, azimuth, chord, chordMount, pitch
+                    (-0.5 0.5 0.0 0.14 0.5 0.0)
+                    ( 0.5 0.5 0.0 0.14 0.5 0.0)
+                );
+            }
+            blade2
+            {
+                nElements   14;
+                profile     NACA0020;
+                elementData
+                ( // axialDistance, radius, azimuth, chord, chordMount, pitch
+                    (-0.5 0.5 120.0 0.14 0.5 0.0)
+                    ( 0.5 0.5 120.0 0.14 0.5 0.0)
+                );
+            }
+            blade3
+            {
+                nElements   14;
+                profile     NACA0020;
+                elementData
+                ( // axialDistance, radius, azimuth, chord, chordMount, pitch
+                    (-0.5 0.5 240.0 0.14 0.5 0.0)
+                    ( 0.5 0.5 240.0 0.14 0.5 0.0)
+                );
+            }
+        }
+        
+        struts
+        {
+            strut1
+            {
+                writePerf   true;
+                nElements   6;
+                profile     NACA0020;
+                elementData
+                ( // axialDistance, radius, azimuth, chord, chordMount, pitch
+                    (0.0 0.05 0.0 0.14 0.3 0.0)
+                    (0.0 0.5 0.0 0.14 0.3 0.0)
+                );
+            }
+            strut2
+            {
+                nElements   6;
+                profile     NACA0020;
+                elementData
+                ( // axialDistance, radius, azimuth, chord, chordMount, pitch
+                    (0.0 0.05 120.0 0.14 0.3 0.0)
+                    (0.0 0.5 120.0 0.14 0.3 0.0)
+                );
+            }
+            strut3
+            {
+                nElements   6;
+                profile     NACA0020;
+                elementData
+                ( // axialDistance, radius, azimuth, chord, chordMount, pitch
+                    (0.0 0.05 240.0 0.14 0.3 0.0)
+                    (0.0 0.5 240.0 0.14 0.3 0.0)
+                );
+            }
+        }
+        
+        shaft
+        { 
+            nElements   20;
+            profile     cylinder;
+            elementData
+            ( // axialDistance, diameter
+                (-0.66 0.09)
+                ( 0.66 0.09)
+            );
+        }
+        
+        profiles
+        {
+            NACA0020
+            {
+                data 
+                (   // alpha C_l C_d
+                    #include "../../resources/foilData/NACA0021_1.6e5"
+                );
+            }
+            cylinder
+            {
+                data ((-180 0 1.1)(180 0 1.1));
+            }
+        }
+    }
+}
+
+// ************************************************************************* //
