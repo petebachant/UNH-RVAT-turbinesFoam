@@ -172,7 +172,7 @@ turbine
             {
                 data 
                 (   // alpha C_l C_d
-                    #include "../../resources/foilData/NACA0021_1.6e5"
+                    #include "$WM_PROJECT_USER_DIR/turbinesFoam/tutorials/resources/foilData/NACA0021_1.6e5"
                 );
             }
             cylinder
