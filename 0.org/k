@@ -22,7 +22,9 @@ internalField   uniform $turbulentKE;
 
 boundaryField
 {
-
+    //- Set patchGroups for constraint patches
+    #includeEtc "caseDicts/setConstraintTypes"
+    
     outlet
     {
         type            inletOutlet;

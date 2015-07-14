@@ -8,3 +8,4 @@ log.*
 !0.org
 system/sampleDict
 *.pvsm
+processor*
