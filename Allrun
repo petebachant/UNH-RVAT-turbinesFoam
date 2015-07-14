@@ -9,8 +9,11 @@ cp -rf 0.org 0
 
 runApplication blockMesh
 runApplication snappyHexMesh -overwrite
-
 runApplication topoSet
+
+cp 0/alpha.water.org 0/alpha.water
+runApplication setFields
+
 pimpleFoam | tee log.pimpleFoam
 
 runApplication vorticity

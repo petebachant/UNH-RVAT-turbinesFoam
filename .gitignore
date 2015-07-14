@@ -8,3 +8,4 @@ log.*
 system/sampleDict
 *.pvsm
 !constant/polyMesh/blockMeshDict
+*~

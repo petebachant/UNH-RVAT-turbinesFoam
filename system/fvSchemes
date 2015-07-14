@@ -36,6 +36,10 @@ divSchemes
     div(R)          Gauss linear;
     div(phi,nuTilda) bounded Gauss upwind;
     div((nuEff*dev(T(grad(U))))) Gauss linear;
+    div(rhoPhi,U)  Gauss vanLeerV;
+    div(phi,alpha)  Gauss vanLeer;
+    div(phirb,alpha) Gauss vanLeer;
+    div((muEff*dev(T(grad(U))))) Gauss linear;
 }
 
 laplacianSchemes
@@ -57,6 +61,8 @@ fluxRequired
 {
     default             no;
     p;
+    p_rgh;
+    pcorr;
 }
 
 
