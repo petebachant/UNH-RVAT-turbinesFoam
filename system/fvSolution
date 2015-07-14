@@ -112,6 +112,9 @@ PIMPLE
     nNonOrthogonalCorrectors 0;
     turbOnFinalIterOnly true;
 
+    pRefPoint       (0 0 0);
+    pRefValue       1e5;
+
     //~ residualControl
     //~ {
         //~ U
