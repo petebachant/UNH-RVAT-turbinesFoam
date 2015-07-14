@@ -8,6 +8,8 @@ cd ${0%/*} || exit 1    # run from this directory
 cp -rf 0.org 0
 
 runApplication blockMesh
+runApplication snappyHexMesh -overwrite
+runApplication topoSet
 runApplication decomposePar
 
 #- For parallel running
@@ -15,8 +17,8 @@ ls -d processor* | xargs -I {} rm -rf ./{}/0
 ls -d processor* | xargs -I {} cp -r 0.org ./{}/0
 
 nProc=$(getNumberOfProcessors)
-runParallel snappyHexMesh $nProc -overwrite
-runParallel topoSet $nProc
+# runParallel snappyHexMesh $nProc -overwrite
+# runParallel topoSet $nProc
 mpirun -np $nProc pimpleFoam -parallel | tee log.pimpleFoam
 runParallel vorticity $nProc
 
