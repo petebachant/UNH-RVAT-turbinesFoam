@@ -45,6 +45,7 @@ runTimeModifiable true;
 adjustTimeStep  false;
 
 maxCo           0.9;
+maxAlphaCo      0.5;
 
 libs
 (
