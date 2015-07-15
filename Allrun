@@ -17,5 +17,5 @@ interFoam | tee log.interFoam
 
 runApplication vorticity
 
-./gensampledict.py
+python scripts/gensampledict.py
 runApplication sample
