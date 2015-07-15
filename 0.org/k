@@ -44,8 +44,9 @@ boundaryField
 
     top
     {
-        type            kqRWallFunction;
-        value           uniform 0.0;
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
     }
 
     bottom

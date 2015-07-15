@@ -27,7 +27,10 @@ boundaryField
 
     outlet
     {
-        type            zeroGradient;
+        type            variableHeightFlowRate;
+        lowerBound      0;
+        upperBound      2;
+        value           $internalField;
     }
 
     bottom
@@ -37,7 +40,9 @@ boundaryField
 
     top
     {
-        type            zeroGradient;
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
     }
 
     walls

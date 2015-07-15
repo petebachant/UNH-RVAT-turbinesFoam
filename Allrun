@@ -11,7 +11,6 @@ runApplication blockMesh
 runApplication snappyHexMesh -overwrite
 runApplication topoSet
 
-cp 0/alpha.water.org 0/alpha.water
 runApplication setFields
 
 interFoam | tee log.interFoam
