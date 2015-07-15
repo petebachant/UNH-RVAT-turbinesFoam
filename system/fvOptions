@@ -34,6 +34,7 @@ turbine
         tipSpeedRatio       1.9;
         tsrAmplitude        0.19;       // Amplitude for TSR oscillation
         tsrPhase            0.70;       // Angle of first peak (rad)
+        rhoRef              1000;       // For calculating C_P, C_T, C_D
         
         dynamicStall
         {
