@@ -43,7 +43,7 @@ solvers
         relTol          0;
     }
 
-    "(U|k|epsilon|nuTilda|R)"
+    "(U|k|epsilon|nuTilda|R|B)"
     {
         solver          smoothSolver;
         smoother        symGaussSeidel;
@@ -51,7 +51,7 @@ solvers
         relTol          0.1;
     }
 
-    "(U|k|epsilon|nuTilda|R)Final"
+    "(U|k|epsilon|nuTilda|R|B)Final"
     {
         $U;
         relTol          0;

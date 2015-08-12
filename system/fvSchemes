@@ -16,7 +16,7 @@ FoamFile
 
 ddtSchemes
 {
-    default             Euler;
+    default         backward;
 }
 
 gradSchemes
@@ -36,6 +36,8 @@ divSchemes
     div(R)          Gauss linear;
     div(phi,nuTilda) bounded Gauss upwind;
     div((nuEff*dev(T(grad(U))))) Gauss linear;
+    div(phi,B)      Gauss limitedLinear 1;
+    div(B)          Gauss linear;
 }
 
 laplacianSchemes
