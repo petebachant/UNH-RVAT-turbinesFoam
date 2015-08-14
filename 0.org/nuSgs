@@ -20,7 +20,6 @@ internalField   uniform 0;
 
 boundaryField
 {
-
     inlet
     {
         type            zeroGradient;
@@ -46,6 +45,10 @@ boundaryField
         type            zeroGradient;
     }
 
+    "proc.*"
+    {
+        type            processor;
+    }
 }
 
 
