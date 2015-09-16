@@ -116,6 +116,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         if sys.argv[1] == "wake":
             plot_meancontquiv()
+            plot_kcont()
         elif sys.argv[1] == "perf":
             plot_cp()
         elif sys.argv[1] == "blade":
