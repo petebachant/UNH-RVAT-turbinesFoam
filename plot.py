@@ -109,6 +109,18 @@ def plot_cp(angle0=540.0):
     plt.ylabel("$C_P$")
     plt.tight_layout()
 
+def plot_perf_curves():
+    """Plot performance curves."""
+    df = pd.read_csv("processed/tsr_sweep.csv")
+    fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
+    ax[0].plot(df.tsr, df.cp, "-o")
+    ax[0].set_ylabel(r"$C_P$")
+    ax[1].plot(df.tsr, df.cd, "-o")
+    ax[1].set_ylabel(r"$C_D$")
+    for a in ax:
+        a.set_xlabel(r"$\lambda$")
+    fig.tight_layout()
+
 
 if __name__ == "__main__":
     set_sns()
@@ -124,6 +136,8 @@ if __name__ == "__main__":
             plot_blade_perf()
         elif sys.argv[1] == "strut":
             plot_strut_perf()
+        elif sys.argv[1] == "perf-curves":
+            plot_perf_curves()
     else:
         plot_cp()
     plt.show()
