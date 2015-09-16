@@ -33,7 +33,7 @@ def log_perf(param="tsr", append=True):
     else:
         df = pd.DataFrame(columns=["tsr", "cp", "cd"])
     df = df.append(pr.calc_perf(t1=3.0), ignore_index=True)
-    df.to_csv("fpath", index=False)
+    df.to_csv(fpath, index=False)
 
 
 def tsr_sweep(start=0.4, stop=3.4, step=0.5, append=False):
