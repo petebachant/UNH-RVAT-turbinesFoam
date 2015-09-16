@@ -4,7 +4,7 @@ Run multiple simulations varying a single parameter.
 """
 
 import foampy
-from foampy.dictionaries import replace_single_line_value
+from foampy.dictionaries import replace_value
 import numpy as np
 from subprocess import call
 import os
@@ -14,13 +14,13 @@ from modules import processing as pr
 
 def zero_tsr_fluc():
     """Set TSR fluctuation amplitude to zero."""
-    replace_single_line_value("fvOptions", "tsrAmplitude", 0.0)
+    replace_value("system/fvOptions", "tsrAmplitude", 0.0)
 
 
 def set_tsr(val):
     """Set mean tip speed ratio."""
-    print("Setting TSR to", tsr)
-    replace_single_line_value("fvOptions", "tipSpeedRatio", val)
+    print("Setting TSR to", val)
+    replace_value("system/fvOptions", "tipSpeedRatio", val)
 
 
 def log_perf(param="tsr", append=True):
@@ -28,7 +28,7 @@ def log_perf(param="tsr", append=True):
     if not os.path.isdir("processed"):
         os.mkdir("processed")
     fpath = "processed/{}_sweep.csv".format(param)
-    if append and os.path.isfile(fpath)
+    if append and os.path.isfile(fpath):
         df = pd.read_csv(fpath)
     else:
         df = pd.DataFrame(columns=["tsr", "cp", "cd"])
