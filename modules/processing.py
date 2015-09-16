@@ -223,5 +223,12 @@ def plot_strut_perf():
     plot_al_perf("strut1")
 
 
+def calc_perf(t1=3.0):
+    """Calculate mean turbine performance."""
+    df = pd.read_csv("postProcessing/turbines/0/turbine.csv")
+    df = df[df.time >= t1]
+    return {"tsr": df.tsr.mean(), "cp": df.cp.mean(), "cd": df.cd.mean()}
+
+
 if __name__ == "__main__":
     pass
