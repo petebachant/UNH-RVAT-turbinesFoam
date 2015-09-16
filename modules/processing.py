@@ -26,7 +26,7 @@ ylabels = {"meanu" : r"$U/U_\infty$",
            "meanv" : r"$V/U_\infty$",
            "meanw" : r"$W/U_\infty$",
            "meanuv" : r"$\overline{u'v'}/U_\infty^2$"}
-           
+
 
 class WakeMap(object):
     """
@@ -34,7 +34,7 @@ class WakeMap(object):
     """
     def __init__(self):
         self.load()
-        
+
     def load_single_time(self, time):
         """
         Loads data from a single time step.
@@ -59,7 +59,8 @@ def loadwake(time):
         z_H = float(fname.split("_")[1])
         data[z_H] = np.loadtxt(fpath, unpack=True)
     return data
-    
+
+
 def calcwake(t1=0.0):
     times = os.listdir("postProcessing/sets")
     times = [float(time) for time in times]
@@ -94,9 +95,106 @@ def calcwake(t1=0.0):
             "meanv" : meanv,
             "meanw" : meanw,
             "xvorticity" : xvorticity,
-            "y/R" : y_R, 
+            "y/R" : y_R,
             "z/H" : z_H}
-    
+
+
+def load_u_profile(z_H=0.0):
+    """
+    Loads data from the sampled mean velocity and returns it as a pandas
+    `DataFrame`.
+    """
+    z_H = float(z_H)
+    timedirs = os.listdir("postProcessing/sets")
+    latest_time = max(timedirs)
+    fname = "profile_{}_UMean.xy".format(z_H)
+    data = np.loadtxt(os.path.join("postProcessing", "sets", latest_time,
+                      fname), unpack=True)
+    df = pd.DataFrame()
+    df["y_R"] = data[0]/R
+    df["u"] = data[1]
+    return df
+
+
+def load_vel_map(component="u"):
+    """
+    Loads all mean streamwise velocity profiles. Returns a `DataFrame` with
+    `z_H` as the index and `y_R` as columns.
+    """
+    # Define columns in set raw data file
+    columns = dict(u=1, v=2, w=3)
+    sets_dir = os.path.join("postProcessing", "sets")
+    latest_time = max(os.listdir(sets_dir))
+    data_dir = os.path.join(sets_dir, latest_time)
+    flist = os.listdir(data_dir)
+    z_H = []
+    for fname in flist:
+        if "UMean" in fname:
+            z_H.append(float(fname.split("_")[1]))
+    z_H.sort()
+    z_H.reverse()
+    vel = []
+    for zi in z_H:
+        fname = "profile_{}_UMean.xy".format(zi)
+        rawdata = np.loadtxt(os.path.join(data_dir, fname), unpack=True)
+        vel.append(rawdata[columns[component]])
+    y_R = rawdata[0]/R
+    vel = np.array(vel).reshape((len(z_H), len(y_R)))
+    df = pd.DataFrame(vel, index=z_H, columns=y_R)
+    return df
+
+
+def load_k_profile(z_H=0.0):
+    """
+    Loads data from the sampled `UPrime2Mean` and `kMean` (if available) and
+    returns it as a pandas `DataFrame`.
+    """
+    z_H = float(z_H)
+    df = pd.DataFrame()
+    timedirs = os.listdir("postProcessing/sets")
+    latest_time = max(timedirs)
+    fname_u = "profile_{}_UPrime2Mean.xy".format(z_H)
+    fname_k = "profile_{}_kMean.xy".format(z_H)
+    data = np.loadtxt(os.path.join("postProcessing", "sets", latest_time,
+                      fname_u), unpack=True)
+    df["y_R"] = data[0]/R
+    df["k_resolved"] = 0.5*(data[1] + data[4] + data[6])
+    try:
+        data = np.loadtxt(os.path.join("postProcessing", "sets", latest_time,
+                          fname_k), unpack=True)
+        df["k_modeled"] = data[1]
+        df["k_total"] = df.k_modeled + df.k_resolved
+    except FileNotFoundError:
+        df["k_modeled"] = np.zeros(len(df.y_R))*np.nan
+        df["k_total"] = df.k_resolved
+    return df
+
+
+def load_k_map(amount="total"):
+    """
+    Loads all TKE profiles. Returns a `DataFrame` with `z_H` as the index and
+    `y_R` as columns.
+    """
+    sets_dir = os.path.join("postProcessing", "sets")
+    latest_time = max(os.listdir(sets_dir))
+    data_dir = os.path.join(sets_dir, latest_time)
+    flist = os.listdir(data_dir)
+    z_H = []
+    for fname in flist:
+        if "UPrime2Mean" in fname:
+            z_H.append(float(fname.split("_")[1]))
+    z_H.sort()
+    z_H.reverse()
+    k = []
+    for z_H_i in z_H:
+        dfi = load_k_profile(z_H_i)
+        k.append(dfi["k_" + amount].values)
+    y_R = dfi.y_R.values
+    k = np.array(k).reshape((len(z_H), len(y_R)))
+    df = pd.DataFrame(k, index=z_H, columns=y_R)
+    return df
+
+
 def plot_al_perf(name="blade1"):
     df_turb = pd.read_csv("postProcessing/turbines/0/turbine.csv")
     df_turb = df_turb.drop_duplicates("time", take_last=True)
@@ -115,19 +213,15 @@ def plot_al_perf(name="blade1"):
     plt.xlabel("Azimuthal angle (degrees)")
     plt.ylabel("Relative velocity (m/s)")
     plt.tight_layout()
-    
+
+
 def plot_blade_perf():
     plot_al_perf("blade1")
-    
+
+
 def plot_strut_perf():
     plot_al_perf("strut1")
 
-def main():
-    p = "figures"
-    plt.close("all")
-    
-    plotwake(plotlist=["meancontquiv"], save=False, savepath=p)
-    plt.show()
 
 if __name__ == "__main__":
-    main()
+    pass

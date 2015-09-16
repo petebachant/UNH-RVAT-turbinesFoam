@@ -12,7 +12,7 @@ import foampy
 # Input parameters
 setformat = "raw"
 interpscheme = "cellPoint"
-fields = ["U", "vorticity"]
+fields = ["UMean", "UPrime2Mean", "pMean", "kMean", "nutMean"]
 x = 1.0
 ymax = 1.82
 ymin = -1.82
@@ -41,12 +41,12 @@ FoamFile
 
 def main():
     z_array = np.linspace(zmin, zmax, nz)
-    
-    txt = header + "\n" 
+
+    txt = header + "\n"
     txt += "setFormat " + setformat + "; \n\n"
     txt += "interpolationScheme " + interpscheme + "; \n\n"
     txt += "sets \n ( \n"
-    
+
     for z in z_array:
         txt += "    " + "profile_" + str(z) + "\n"
         txt += "    { \n"
@@ -55,16 +55,16 @@ def main():
         txt += "        start       (" + str(x) + " " + str(ymin) + " " + str(z) + ");\n"
         txt += "        end         (" + str(x) + " " + str(ymax) + " " + str(z) + ");\n"
         txt += "        nPoints     " + str(ny) + ";\n    }\n\n"
-        
+
     txt += ");\n\n"
     txt += "fields \n(\n"
-    
+
     for field in fields:
         txt += "    " + field + "\n"
-        
+
     txt += "); \n\n"
     txt += "// *********************************************************************** // \n"
-    
+
     with open("system/sampleDict", "w") as f:
         f.write(txt)
 

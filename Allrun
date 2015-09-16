@@ -16,4 +16,4 @@ pimpleFoam | tee log.pimpleFoam
 runApplication vorticity
 
 python scripts/gensampledict.py
-runApplication sample
+runApplication sample -latestTime
