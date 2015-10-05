@@ -3,46 +3,68 @@ Plotting functions
 """
 
 from .processing import *
+import matplotlib.pyplot as plt
 
 
-def plot_meancontquiv():
-    u = load_vel_map("u")
-    v = load_vel_map("v")
-    w = load_vel_map("w")
-    y_R = np.round(np.asarray(u.columns.values, dtype=float), decimals=4)
-    z_H = np.asarray(u.index.values, dtype=float)
-    plt.figure(figsize=(7, 6.8))
+def plot_exp_lines(color="gray", linewidth=2):
+    """Plots the outline of the experimental y-z measurement plane"""
+    plt.hlines(0.625, -3, 3, linestyles="dashed", colors=color,
+               linewidth=linewidth)
+    plt.hlines(0.0, -3, 3, linestyles="dashed", colors=color,
+               linewidth=linewidth)
+    plt.vlines(-3.0, 0.0, 0.625, linestyles="dashed", colors=color,
+               linewidth=linewidth)
+    plt.vlines(3.0, 0.0, 0.625, linestyles="dashed", colors=color,
+               linewidth=linewidth)
+
+
+def plot_meancontquiv(save=False, show=False,
+                      cb_orientation="vertical"):
+    """Plot mean contours/quivers of velocity."""
+    mean_u = load_vel_map("u")
+    mean_v = load_vel_map("v")
+    mean_w = load_vel_map("w")
+    y_R = np.round(np.asarray(mean_u.columns.values, dtype=float), decimals=4)
+    z_H = np.asarray(mean_u.index.values, dtype=float)
+    plt.figure(figsize=(7.5, 4.5))
     # Add contours of mean velocity
-    cs = plt.contourf(y_R, z_H, u, 20, cmap=plt.cm.coolwarm)
-    cb = plt.colorbar(cs, shrink=1, extend='both',
-                      orientation='horizontal', pad=0.12)
-                      #ticks=np.round(np.linspace(0.44, 1.12, 10), decimals=2))
-    cb.set_label(r'$U/U_{\infty}$')
+    cs = plt.contourf(y_R, z_H, mean_u,
+                      np.arange(0.15, 1.25, 0.05), cmap=plt.cm.coolwarm)
+    if cb_orientation == "horizontal":
+        cb = plt.colorbar(cs, shrink=1, extend="both",
+                          orientation="horizontal", pad=0.14)
+    elif cb_orientation == "vertical":
+        cb = plt.colorbar(cs, shrink=1, extend="both",
+                          orientation="vertical", pad=0.02)
+    cb.set_label(r"$U/U_{\infty}$")
     plt.hold(True)
     # Make quiver plot of v and w velocities
-    Q = plt.quiver(y_R, z_H, v, w, angles='xy', width=0.0022,
+    Q = plt.quiver(y_R, z_H, mean_v, mean_w, width=0.0022,
                    edgecolor="none", scale=3.0)
-    plt.xlabel(r'$y/R$')
-    plt.ylabel(r'$z/H$')
-    #plt.ylim(-0.2, 0.78)
-    #plt.xlim(-3.2, 3.2)
-    plt.xlim(-3.66, 3.66)
-    plt.ylim(-1.22, 1.22)
-    plt.quiverkey(Q, 0.8, 0.22, 0.1, r'$0.1 U_\infty$',
-               labelpos='E',
-               coordinates='figure',
-               fontproperties={'size': 'small'})
-    plt.hlines(0.5, -1, 1, linestyles='solid', colors='gray',
-               linewidth=3)
-    plt.hlines(-0.5, -1, 1, linestyles='solid', colors='gray',
-               linewidth=3)
-    plt.vlines(-1, -0.5, 0.5, linestyles='solid', colors='gray',
-               linewidth=3)
-    plt.vlines(1, -0.5, 0.5, linestyles='solid', colors='gray',
-               linewidth=3)
+    plt.xlabel(r"$y/R$")
+    plt.ylabel(r"$z/H$")
+    if cb_orientation == "horizontal":
+        plt.quiverkey(Q, 0.65, 0.26, 0.1, r"$0.1 U_\infty$",
+                      labelpos="E",
+                      coordinates="figure",
+                      fontproperties={"size": "small"})
+    elif cb_orientation == "vertical":
+        plt.quiverkey(Q, 0.65, 0.07, 0.1, r"$0.1 U_\infty$",
+                      labelpos="E",
+                      coordinates="figure",
+                      fontproperties={"size": "small"})
+    plot_turb_lines()
+    plot_exp_lines()
     ax = plt.axes()
     ax.set_aspect(2.0)
+    plt.yticks(np.around(np.arange(-1.125, 1.126, 0.125), decimals=2))
     plt.tight_layout()
+    if show:
+        plt.show()
+    if save:
+        figname = "rvat-alm-meanconquiv"
+        plt.savefig(figname + ".pdf")
+        plt.savefig(figname + ".png", dpi=300)
 
 
 def plot_kcont(cb_orientation="vertical", newfig=True):
