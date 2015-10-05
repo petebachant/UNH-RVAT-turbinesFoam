@@ -102,6 +102,7 @@ def plot_cp(angle0=540.0):
     plt.ylabel("$C_P$")
     plt.tight_layout()
 
+
 def plot_perf_curves(exp=False):
     """Plot performance curves."""
     df = pd.read_csv("processed/tsr_sweep.csv")
@@ -122,3 +123,43 @@ def plot_perf_curves(exp=False):
                    markerfacecolor="none")
         ax[1].legend(loc="lower right")
     fig.tight_layout()
+
+
+def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False):
+    df_turb = pd.read_csv("postProcessing/turbines/0/turbine.csv")
+    df_turb = df_turb.drop_duplicates("time", take_last=True)
+    df = pd.read_csv("postProcessing/actuatorLines/0/{}.csv".format(name))
+    df = df.drop_duplicates("time", take_last=True)
+    df["angle_deg"] = df_turb.angle_deg
+    df["ct"] = df.cl*np.sin(np.deg2rad(df.alpha_deg)) \
+             - df.cd*np.cos(np.deg2rad(df.alpha_deg))
+    df = df[df.angle_deg >= theta1]
+    if theta2 is not None:
+        df = df[df.angle_deg <= theta2]
+    if remove_offset:
+        offset = df.angle_deg.values[0]
+        df.angle_deg -= offset
+        theta1 -= offset
+        if theta2 is not None:
+            theta2 -= offset
+    fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=3)
+    ax[0].plot(df.angle_deg, df.alpha_deg, label="Actual")
+    ax[0].plot(df.angle_deg, df.alpha_geom_deg, label="Geometric")
+    ax[0].set_ylabel("Angle of attack (degrees)")
+    ax[0].legend(loc="best")
+    ax[1].plot(df.angle_deg, df.rel_vel_mag)
+    ax[1].set_ylabel("Relative velocity (m/s)")
+    ax[2].plot(df.angle_deg, df.ct)
+    ax[2].set_ylabel("$C_T$")
+    for a in ax:
+        a.set_xlim((theta1, theta2))
+        a.set_xlabel(r"$\theta$ (degrees)")
+    fig.tight_layout()
+
+
+def plot_blade_perf(theta1=360, theta2=720, remove_offset=False):
+    plot_al_perf("blade1", theta1, theta2, remove_offset)
+
+
+def plot_strut_perf():
+    plot_al_perf("strut1")
