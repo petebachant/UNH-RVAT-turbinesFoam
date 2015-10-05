@@ -8,7 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import sys
-from modules.plotting import *
+from py_unh_rvat_turbinesfoam.plotting import *
 from pxl.styleplot import set_sns
 
 
