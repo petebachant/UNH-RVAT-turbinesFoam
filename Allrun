@@ -18,4 +18,4 @@ runApplication vorticity
 python scripts/gensampledict.py
 runApplication sample -latestTime
 
-script/Allrun.post
+scripts/Allrun.post
