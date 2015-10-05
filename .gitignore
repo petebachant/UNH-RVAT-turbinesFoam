@@ -10,3 +10,4 @@ system/sampleDict
 !constant/polyMesh/blockMeshDict
 figures
 processed
+dynamicCode
