@@ -120,7 +120,7 @@ def plot_turb_lines(half=False, color="gray"):
                    linewidth=3)
 
 
-def plot_cp(angle0=540.0):
+def plot_cp(ax=None, angle0=540.0, save=False):
     df = pd.read_csv("postProcessing/turbines/0/turbine.csv")
     df = df.drop_duplicates("time", take_last=True)
     if df.angle_deg.max() < angle0:
@@ -130,13 +130,19 @@ def plot_cp(angle0=540.0):
     print("Mean TSR = {:.2f}".format(df.tsr[df.angle_deg >= angle0].mean()))
     print("Mean C_P = {:.2f}".format(df.cp[df.angle_deg >= angle0].mean()))
     print("Mean C_D = {:.2f}".format(df.cd[df.angle_deg >= angle0].mean()))
-    plt.plot(df.angle_deg, df.cp)
-    plt.xlabel("Azimuthal angle (degrees)")
-    plt.ylabel("$C_P$")
+    if ax is None:
+        fig, ax = plt.subplots()
+    ax.plot(df.angle_deg, df.cp)
+    ax.set_xlabel("Azimuthal angle (degrees)")
+    ax.set_ylabel("$C_P$")
     plt.tight_layout()
+    if save:
+        figname = "cp"
+        plt.savefig("figures/" + figname + ".pdf")
+        plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
-def plot_perf_curves(exp=False):
+def plot_perf_curves(exp=False, save=False):
     """Plot performance curves."""
     df = pd.read_csv("processed/tsr_sweep.csv")
     if exp:
@@ -147,6 +153,7 @@ def plot_perf_curves(exp=False):
     ax[0].set_ylabel(r"$C_P$")
     ax[1].plot(df.tsr, df.cd, "-o", label="ALM")
     ax[1].set_ylabel(r"$C_D$")
+    ax[1].set_ylim((0, None))
     for a in ax:
         a.set_xlabel(r"$\lambda$")
     if exp:
@@ -156,6 +163,10 @@ def plot_perf_curves(exp=False):
                    markerfacecolor="none")
         ax[1].legend(loc="lower right")
     fig.tight_layout()
+    if save:
+        figname = "perf-curves"
+        plt.savefig("figures/" + figname + ".pdf")
+        plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
 def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False):
@@ -190,12 +201,20 @@ def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False):
     fig.tight_layout()
 
 
-def plot_blade_perf(theta1=0, theta2=None, remove_offset=False):
+def plot_blade_perf(theta1=0, theta2=None, remove_offset=False, save=False):
     plot_al_perf("blade1", theta1, theta2, remove_offset)
+    if save:
+        figname = "blade-perf"
+        plt.savefig("figures/" + figname + ".pdf")
+        plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
-def plot_strut_perf():
+def plot_strut_perf(save=False):
     plot_al_perf("strut1")
+    if save:
+        figname = "strut-perf"
+        plt.savefig("figures/" + figname + ".pdf")
+        plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
 def make_recovery_bar_chart(ax=None, save=False):
@@ -220,5 +239,6 @@ def make_recovery_bar_chart(ax=None, save=False):
     if fig is not None:
         fig.tight_layout()
     if save and fig is not None:
-        fig.savefig("figures/recovery-bar-chart.pdf")
-        fig.savefig("figures/recovery-bar-chart.png", dpi=300)
+        figname = "recovery-bar-chart"
+        fig.savefig("figures/{}.pdf".format(figname))
+        fig.savefig("figures/{}.png".format(figname), dpi=300)
