@@ -70,11 +70,11 @@ def plot_meancontquiv(save=False, show=False,
         plt.show()
     if save:
         figname = "rvat-alm-meanconquiv"
-        plt.savefig(figname + ".pdf")
-        plt.savefig(figname + ".png", dpi=300)
+        plt.savefig("figures/" + figname + ".pdf")
+        plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
-def plot_kcont(cb_orientation="vertical", newfig=True):
+def plot_kcont(cb_orientation="vertical", newfig=True, save=False):
     """Plot contours of TKE."""
     k = load_k_map()
     y_R = np.round(np.asarray(k.columns.values, dtype=float), decimals=4)
@@ -98,6 +98,10 @@ def plot_kcont(cb_orientation="vertical", newfig=True):
     ax.set_aspect(2)
     plt.yticks([0,0.13,0.25,0.38,0.5,0.63])
     plt.tight_layout()
+    if save:
+        figname = "rvat-alm-kcont"
+        plt.savefig("figures/" + figname + ".pdf")
+        plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
 def plot_turb_lines(half=False, color="gray"):
