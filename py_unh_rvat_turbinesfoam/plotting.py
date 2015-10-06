@@ -69,7 +69,7 @@ def plot_meancontquiv(save=False, show=False,
     if show:
         plt.show()
     if save:
-        figname = "rvat-alm-meanconquiv"
+        figname = "meancontquiv"
         plt.savefig("figures/" + figname + ".pdf")
         plt.savefig("figures/" + figname + ".png", dpi=300)
 
@@ -99,7 +99,7 @@ def plot_kcont(cb_orientation="vertical", newfig=True, save=False):
     plt.yticks([0,0.13,0.25,0.38,0.5,0.63])
     plt.tight_layout()
     if save:
-        figname = "rvat-alm-kcont"
+        figname = "kcont"
         plt.savefig("figures/" + figname + ".pdf")
         plt.savefig("figures/" + figname + ".png", dpi=300)
 
@@ -220,5 +220,5 @@ def make_recovery_bar_chart(ax=None, save=False):
     if fig is not None:
         fig.tight_layout()
     if save and fig is not None:
-        fig.savefig("figures/rvat-alm-recovery-bar-chart.pdf")
-        fig.savefig("figures/rvat-alm-recovery-bar-chart.png", dpi=300)
+        fig.savefig("figures/recovery-bar-chart.pdf")
+        fig.savefig("figures/recovery-bar-chart.png", dpi=300)
