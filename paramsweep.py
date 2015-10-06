@@ -9,7 +9,7 @@ import numpy as np
 from subprocess import call
 import os
 import pandas as pd
-from modules import processing as pr
+from py_unh_rvat_turbinesfoam import processing as pr
 
 
 def zero_tsr_fluc():
