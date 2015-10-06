@@ -190,7 +190,7 @@ def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False):
     fig.tight_layout()
 
 
-def plot_blade_perf(theta1=360, theta2=720, remove_offset=False):
+def plot_blade_perf(theta1=0, theta2=None, remove_offset=False):
     plot_al_perf("blade1", theta1, theta2, remove_offset)
 
 
