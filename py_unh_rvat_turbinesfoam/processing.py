@@ -10,7 +10,7 @@ import numpy as np
 import os
 import sys
 import foampy
-from pxl import fdiff
+from pxl import fdiff, timeseries as ts
 import pandas as pd
 
 # Some constants
@@ -20,6 +20,8 @@ H = 1.0
 D = 1.0
 A = H*D
 rho = 1000.0
+nu = 1e-6
+A_c = 3.66*2.44 # Tow tank cross-section
 
 ylabels = {"meanu" : r"$U/U_\infty$",
            "stdu" : r"$\sigma_u/U_\infty$",
@@ -223,6 +225,30 @@ def read_funky_log():
                 pass
     return {"y_adv" : y_adv, "z_adv" : z_adv, "turb_trans" : turb_trans,
             "visc_trans" : visc_trans, "pressure_trans" : pressure_trans}
+
+
+def load_exp_recovery():
+    """Load recovery terms from experimental data. Must be run with IPython."""
+    start_dir = os.getcwd()
+    exp_dir = os.path.join(os.path.expanduser("~"), "Google Drive", "Research",
+                           "Experiments", "RVAT Re dep")
+    os.chdir(exp_dir)
+    import py_rvat_re_dep.plotting as exppl
+    wm = exppl.WakeMap(1.0)
+    dUdy = wm.dUdy
+    dUdz = wm.dUdz
+    tt = wm.ddy_upvp + wm.ddz_upwp
+    d2Udy2 = wm.d2Udy2
+    d2Udz2 = wm.d2Udz2
+    meanu, meanv, meanw = wm.df.mean_u, wm.df.mean_v, wm.df.mean_w
+    y_R, z_H = wm.y_R, wm.z_H
+    os.chdir(start_dir)
+    return {"y_adv": ts.average_over_area(-meanv*dUdy/meanu/U*D, y_R, z_H),
+            "z_adv": ts.average_over_area(-meanw*dUdz/meanu/U*D, y_R, z_H),
+            "turb_trans": ts.average_over_area(-tt/meanu/U*D, y_R, z_H),
+            "visc_trans": ts.average_over_area(nu*(d2Udy2 + d2Udz2)/meanu/U*D,
+                                               y_R, z_H),
+            "pressure_trans": np.nan}
 
 
 if __name__ == "__main__":

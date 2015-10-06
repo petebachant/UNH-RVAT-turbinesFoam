@@ -6,6 +6,13 @@ from .processing import *
 import matplotlib.pyplot as plt
 
 
+labels = {"y_adv": r"$-V \frac{\partial U}{\partial y}$",
+          "z_adv": r"$-W \frac{\partial U}{\partial z}$",
+          "turb_trans": r"Turb. trans.",
+          "pressure_trans": r"$-\frac{\partial P}{\partial x}$",
+          "visc_trans": r"Visc. trans."}
+
+
 def plot_exp_lines(color="gray", linewidth=2):
     """Plots the outline of the experimental y-z measurement plane"""
     plt.hlines(0.625, -3, 3, linestyles="dashed", colors=color,
@@ -185,3 +192,29 @@ def plot_blade_perf(theta1=360, theta2=720, remove_offset=False):
 
 def plot_strut_perf():
     plot_al_perf("strut1")
+
+
+def make_recovery_bar_chart(ax=None, save=False):
+    """
+    Create a bar chart with x-labels for each recovery term and 5 different
+    bars per term, corresponding to each CFD case and the experimental data.
+    """
+    A_exp = 3.0*0.625
+    df = pd.DataFrame(index=["y_adv", "z_adv", "turb_trans", "pressure_trans",
+                             "visc_trans"])
+    df["ALM"] = pd.Series(read_funky_log(), name="ALM")*A_c
+    df["Exp."] = pd.Series(load_exp_recovery(), name="Exp.")*A_exp
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(7, 3.5))
+    else:
+        fig = None
+    df.index = [labels[k] for k in df.index.values]
+    df.plot(kind="bar", ax=ax, rot=0)
+    ax.hlines(0, -0.5, len(df) + 0.5, color="gray")
+    ax.set_ylabel(r"$\frac{U \, \mathrm{ transport} \times A_c}"
+                  "{UU_\infty D^{-1}}$")
+    if fig is not None:
+        fig.tight_layout()
+    if save and fig is not None:
+        fig.savefig("figures/rvat-alm-recovery-bar-chart.pdf")
+        fig.savefig("figures/rvat-alm-recovery-bar-chart.png", dpi=300)
