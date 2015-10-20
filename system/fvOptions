@@ -90,14 +90,13 @@ turbine
             {
                 writePerf   true;
                 nElements   14;
+                endEffects  on;
                 elementProfiles (NACA0020);
                 elementData
                 ( // axialDistance, radius, azimuth, chord, chordMount, pitch
                     (-0.5 0.5 0.0 0.14 0.5 0.0)
                     ( 0.5 0.5 0.0 0.14 0.5 0.0)
                 );
-                tipEffectLength 1e2;
-                rootEffectLength $tipEffectLength;
             }
             blade2
             {
