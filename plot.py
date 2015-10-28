@@ -26,6 +26,8 @@ if __name__ == "__main__":
                         default=False, action="store_true")
     parser.add_argument("--noshow", help="Do not call matplotlib show function",
                         default=False, action="store_true")
+    parser.add_argument("-q", help="Quantities to plot", nargs="*",
+                        default=["alpha", "rel_vel_mag", "ct"])
     args = parser.parse_args()
 
     if "wake" in args.plot or args.all:
@@ -34,9 +36,9 @@ if __name__ == "__main__":
     if "perf" in args.plot or args.all:
         plot_cp(save=args.save)
     if "blade-perf" in args.plot or args.all:
-        plot_blade_perf(save=args.save)
+        plot_blade_perf(save=args.save, quantities=args.q)
     if "strut-perf" in args.plot or args.all:
-        plot_strut_perf(save=args.save)
+        plot_strut_perf(save=args.save, quantities=args.q)
     if "perf-curves" in args.plot or args.all:
         plot_perf_curves(exp=False, save=args.save)
     if "perf-curves-exp" in args.plot or args.all:

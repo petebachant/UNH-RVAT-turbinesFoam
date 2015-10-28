@@ -10,7 +10,11 @@ labels = {"y_adv": r"$-V \frac{\partial U}{\partial y}$",
           "z_adv": r"$-W \frac{\partial U}{\partial z}$",
           "turb_trans": r"Turb. trans.",
           "pressure_trans": r"$-\frac{\partial P}{\partial x}$",
-          "visc_trans": r"Visc. trans."}
+          "visc_trans": r"Visc. trans.",
+          "rel_vel_mag": "Relative velocity (m/s)",
+          "ct": "$C_t$",
+          "cm": "$C_m$",
+          "alpha_deg": "Angle of attack (degrees)"}
 
 
 def plot_exp_lines(color="gray", linewidth=2):
@@ -169,7 +173,10 @@ def plot_perf_curves(exp=False, save=False):
         plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
-def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False):
+def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False,
+                 quantities=["alpha", "rel_vel_mag", "ct"]):
+    if isinstance(quantities, str):
+        quantities = [quantities]
     df_turb = pd.read_csv("postProcessing/turbines/0/turbine.csv")
     df_turb = df_turb.drop_duplicates("time", take_last=True)
     df = pd.read_csv("postProcessing/actuatorLines/0/{}.csv".format(name))
@@ -186,31 +193,37 @@ def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False):
         theta1 -= offset
         if theta2 is not None:
             theta2 -= offset
-    fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=3)
-    ax[0].plot(df.angle_deg, df.alpha_deg, label="Actual")
-    ax[0].plot(df.angle_deg, df.alpha_geom_deg, label="Geometric")
-    ax[0].set_ylabel("Angle of attack (degrees)")
-    ax[0].legend(loc="best")
-    ax[1].plot(df.angle_deg, df.rel_vel_mag)
-    ax[1].set_ylabel("Relative velocity (m/s)")
-    ax[2].plot(df.angle_deg, df.ct)
-    ax[2].set_ylabel("$C_T$")
-    for a in ax:
+    if len(quantities) > 1:
+        fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1,
+                               ncols=len(quantities))
+    else:
+        fig, ax = plt.subplots()
+        ax = [ax]
+    for a, q in zip(ax, quantities):
+        if q == "alpha":
+            a.plot(df.angle_deg, df.alpha_deg, label="Actual")
+            a.plot(df.angle_deg, df.alpha_geom_deg, label="Geometric")
+            a.set_ylabel("Angle of attack (degrees)")
+            a.legend(loc="best")
+        else:
+            a.plot(df.angle_deg, df[q])
+            a.set_ylabel(labels[q])
         a.set_xlim((theta1, theta2))
         a.set_xlabel(r"$\theta$ (degrees)")
     fig.tight_layout()
 
 
-def plot_blade_perf(theta1=0, theta2=None, remove_offset=False, save=False):
-    plot_al_perf("blade1", theta1, theta2, remove_offset)
+def plot_blade_perf(theta1=0, theta2=None, remove_offset=False, save=False,
+                    **kwargs):
+    plot_al_perf("blade1", theta1, theta2, remove_offset, **kwargs)
     if save:
         figname = "blade-perf"
         plt.savefig("figures/" + figname + ".pdf")
         plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
-def plot_strut_perf(save=False):
-    plot_al_perf("strut1")
+def plot_strut_perf(save=False, **kwargs):
+    plot_al_perf("strut1", **kwargs)
     if save:
         figname = "strut-perf"
         plt.savefig("figures/" + figname + ".pdf")
