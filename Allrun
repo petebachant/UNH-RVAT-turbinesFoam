@@ -27,3 +27,5 @@ rm -rf processor*
 
 python scripts/gensampledict.py
 runApplication sample
+runApplication sample -latestTime
+scripts/Allrun.post

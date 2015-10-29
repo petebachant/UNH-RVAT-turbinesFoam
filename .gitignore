@@ -2,10 +2,13 @@
 [0-9]*
 constant/polyMesh/*
 *.OpenFOAM
-!constant/polyMesh/blockMeshDict
 log.*
 *.pyc
 !0.org
 system/sampleDict
 *.pvsm
 processor*
+!constant/polyMesh/blockMeshDict
+figures
+processed
+dynamicCode
