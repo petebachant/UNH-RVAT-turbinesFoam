@@ -12,8 +12,9 @@ labels = {"y_adv": r"$-V \frac{\partial U}{\partial y}$",
           "pressure_trans": r"$-\frac{\partial P}{\partial x}$",
           "visc_trans": r"Visc. trans.",
           "rel_vel_mag": "Relative velocity (m/s)",
-          "ct": "$C_t$",
+          "cc": "$C_c$",
           "cm": "$C_m$",
+          "cn": "$C_n$",
           "alpha_deg": "Angle of attack (degrees)"}
 
 
@@ -182,8 +183,10 @@ def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False,
     df = pd.read_csv("postProcessing/actuatorLines/0/{}.csv".format(name))
     df = df.drop_duplicates("time", take_last=True)
     df["angle_deg"] = df_turb.angle_deg
-    df["ct"] = df.cl*np.sin(np.deg2rad(df.alpha_deg)) \
+    df["cc"] = df.cl*np.sin(np.deg2rad(df.alpha_deg)) \
              - df.cd*np.cos(np.deg2rad(df.alpha_deg))
+    df["cn"] = df.cl*np.cos(np.deg2rad(df.alpha_deg)) \
+             - df.cd*np.sin(np.deg2rad(df.alpha_deg))
     df = df[df.angle_deg >= theta1]
     if theta2 is not None:
         df = df[df.angle_deg <= theta2]
