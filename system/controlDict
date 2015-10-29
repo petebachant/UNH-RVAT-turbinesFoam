@@ -64,6 +64,7 @@ functions
         timeStart       3.0;
         outputControl   runTime;
         writeInterval   $endTime;
+        outputControl   outputTime;
         resetOnRestart  true;
         resetOnOutput   false;
 
@@ -84,13 +85,6 @@ functions
             }
             
             nuSgs
-            {
-                mean        on;
-                prime2Mean  off;
-                base        time;
-            }
-            
-            k
             {
                 mean        on;
                 prime2Mean  off;
