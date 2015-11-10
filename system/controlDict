@@ -62,8 +62,7 @@ functions
         functionObjectLibs ("libfieldFunctionObjects.so");
         enabled         true;
         timeStart       3.0;
-        outputControl   runTime;
-        writeInterval   $endTime;
+        outputControl   outputTime;
         resetOnRestart  true;
         resetOnOutput   false;
 
@@ -82,7 +81,7 @@ functions
                 prime2Mean  off;
                 base        time;
             }
-            
+
             nuSgs
             {
                 mean        on;

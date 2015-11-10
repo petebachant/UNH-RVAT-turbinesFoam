@@ -1,0 +1,95 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+planeAverageAdvectionZ
+{
+    type swakExpression;
+    outputControlMode timeStep;
+    outputInterval 1;
+    valueType surface;
+    surfaceName testPlane;
+    surface {
+        type plane;
+        basePoint (1.0 0.0 0.0);
+        normalVector (1 0 0);
+        interpolate true;
+    };
+    verbose true;
+    expression "-UMean.z/UMean.x*gradUMeanX.z";
+    accumulations (weightedAverage);
+}
+
+planeAverageAdvectionY
+{
+    type swakExpression;
+    outputControlMode timeStep;
+    outputInterval 1;
+    valueType surface;
+    surfaceName testPlane;
+    verbose true;
+    expression "-UMean.y/UMean.x*gradUMeanX.y";
+    accumulations (weightedAverage);
+}
+
+planeAverageTurbTrans
+{
+    type swakExpression;
+    outputControlMode timeStep;
+    outputInterval 1;
+    valueType surface;
+    surfaceName testPlane;
+    verbose true;
+    expression "1.0/UMean.x*nutMean*laplacianUMeanX";
+    accumulations (weightedAverage);
+}
+
+planeAverageViscTrans
+{
+    type swakExpression;
+    outputControlMode timeStep;
+    outputInterval 1;
+    valueType surface;
+    surfaceName testPlane;
+    verbose true;
+    expression "1.0/UMean.x*1e-6*laplacianUMeanX";
+    accumulations (weightedAverage);
+}
+
+planeAveragePressureGradient
+{
+    type swakExpression;
+    outputControlMode timeStep;
+    outputInterval 1;
+    valueType surface;
+    surfaceName testPlane;
+    verbose true;
+    expression "-gradPMeanX/UMean.x";
+    accumulations (weightedAverage);
+}
+
+planeAverageUx
+{
+    type swakExpression;
+    outputControlMode timeStep;
+    outputInterval 1;
+    valueType surface;
+    surfaceName testPlane;
+    verbose true;
+    expression "UMean.x";
+    accumulations (weightedAverage);
+}
+
+// ************************************************************************* //

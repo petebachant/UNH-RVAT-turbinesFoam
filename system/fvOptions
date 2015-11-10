@@ -29,12 +29,12 @@ turbine
         origin              (0 0 0);
         axis                (0 0 1);    // Negative for opposite rotation
         rotorRadius         0.5;
-        tipEffect           0.95; 
         freeStreamVelocity  (1 0 0);
         tipSpeedRatio       1.9;
         tsrAmplitude        0.19;       // Amplitude for TSR oscillation
         tsrPhase            0.70;       // Angle of first peak (rad)
-        
+        addedMass           on;
+
         dynamicStall
         {
             active              on;
@@ -78,7 +78,7 @@ turbine
                 E0          0.16;
             }
         }
-        
+
         flowCurvature
         {
             active              on;
@@ -91,7 +91,8 @@ turbine
             {
                 writePerf   true;
                 nElements   14;
-                profile     NACA0020;
+                endEffects  on;
+                elementProfiles (NACA0020);
                 elementData
                 ( // axialDistance, radius, azimuth, chord, chordMount, pitch
                     (-0.5 0.5 0.0 0.14 0.5 0.0)
@@ -100,33 +101,24 @@ turbine
             }
             blade2
             {
-                nElements   14;
-                profile     NACA0020;
-                elementData
-                ( // axialDistance, radius, azimuth, chord, chordMount, pitch
-                    (-0.5 0.5 120.0 0.14 0.5 0.0)
-                    ( 0.5 0.5 120.0 0.14 0.5 0.0)
-                );
+                $blade1;
+                writePerf   false;
+                azimuthalOffset 120.0;
             }
             blade3
             {
-                nElements   14;
-                profile     NACA0020;
-                elementData
-                ( // axialDistance, radius, azimuth, chord, chordMount, pitch
-                    (-0.5 0.5 240.0 0.14 0.5 0.0)
-                    ( 0.5 0.5 240.0 0.14 0.5 0.0)
-                );
+                $blade2;
+                azimuthalOffset 240.0;
             }
         }
-        
+
         struts
         {
             strut1
             {
                 writePerf   true;
                 nElements   6;
-                profile     NACA0020;
+                elementProfiles (NACA0020);
                 elementData
                 ( // axialDistance, radius, azimuth, chord, chordMount, pitch
                     (0.0 0.05 0.0 0.14 0.3 0.0)
@@ -135,42 +127,34 @@ turbine
             }
             strut2
             {
-                nElements   6;
-                profile     NACA0020;
-                elementData
-                ( // axialDistance, radius, azimuth, chord, chordMount, pitch
-                    (0.0 0.05 120.0 0.14 0.3 0.0)
-                    (0.0 0.5 120.0 0.14 0.3 0.0)
-                );
+                $strut1;
+                writePerf   false;
+                azimuthalOffset 120.0;
             }
             strut3
             {
-                nElements   6;
-                profile     NACA0020;
-                elementData
-                ( // axialDistance, radius, azimuth, chord, chordMount, pitch
-                    (0.0 0.05 240.0 0.14 0.3 0.0)
-                    (0.0 0.5 240.0 0.14 0.3 0.0)
-                );
+                $strut2;
+                azimuthalOffset 240.0;
             }
         }
-        
+
         shaft
-        { 
+        {
             nElements   20;
-            profile     cylinder;
+            elementProfiles (cylinder);
             elementData
             ( // axialDistance, diameter
                 (-0.66 0.09)
                 ( 0.66 0.09)
             );
         }
-        
-        profiles
+
+        profileData
         {
             NACA0020
             {
-                data 
+                // Re      1.6e5;
+                data
                 (   // alpha C_l C_d
                     #include "NACA0021_1.6e5"
                 );
