@@ -18,12 +18,13 @@ ls -d processor* | xargs -I {} cp -r 0.org ./{}/0
 nProc=$(getNumberOfProcessors)
 # runParallel snappyHexMesh $nProc -overwrite
 # runParallel topoSet $nProc
-mpirun -np $nProc pimpleFoam -parallel | tee log.pimpleFoam
+runParallel pimpleFoam $nProc
 runParallel vorticity $nProc
 
 runApplication reconstructPar
 rm -rf processor*
 
+vorticity -time 0
 python scripts/gensampledict.py
 runApplication sample
 runApplication sample -latestTime
