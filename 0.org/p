@@ -22,6 +22,9 @@ internalField   uniform $pressure;
 
 boundaryField
 {
+    //- Set patchGroups for constraint patches
+    #includeEtc "caseDicts/setConstraintTypes"
+
     inlet
     {
         type            zeroGradient;
@@ -46,11 +49,6 @@ boundaryField
     bottom
     {
         type            zeroGradient;
-    }
-    
-    "proc.*"
-    {
-        type            processor;
     }
 }
 

@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import sys
-from py_unh_rvat_turbinesfoam.plotting import *
+from pyurtf.plotting import *
 from pxl.styleplot import set_sns
 import argparse
 

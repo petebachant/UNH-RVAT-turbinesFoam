@@ -23,6 +23,8 @@ internalField   uniform $flowVelocity;
 
 boundaryField
 {
+    #includeEtc "caseDicts/setConstraintTypes"
+
     #include "include/fixedInlet"
 
     outlet
@@ -49,10 +51,6 @@ boundaryField
         value       uniform (1 0 0);
     }
 
-    "proc.*"
-    {
-        type            processor;
-    }
 }
 
 

@@ -20,6 +20,8 @@ internalField   uniform 0.001; // sqrt(3/2)*U*I*l
 
 boundaryField
 {
+    //- Set patchGroups for constraint patches
+    #includeEtc "caseDicts/setConstraintTypes"
 
     inlet
     {
