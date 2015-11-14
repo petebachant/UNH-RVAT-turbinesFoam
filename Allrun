@@ -10,26 +10,6 @@ cp -rf 0.org 0
 runApplication blockMesh
 runApplication snappyHexMesh -overwrite
 runApplication topoSet
-<<<<<<< HEAD
-
-#- If running parallel
-# nProc=$(getNumberOfProcessors)
-# runApplication decomposePar
-# ls -d processor* | xargs -I {} rm -rf ./{}/0
-# ls -d processor* | xargs -I {} cp -r 0.org ./{}/0
-# runParallel pimpleFoam $nProc 
-# runParallel vorticity  $nProc
-
-#- If running serial
-pimpleFoam | tee log.pimpleFoam
-runApplication vorticity
-
-#- If running parallel
-# runApplication reconstructPar
-
-python scripts/gensampledict.py
-runApplication sample -latestTime
-=======
 
 if [ "$1" = "-parallel" ]
     then
@@ -42,7 +22,6 @@ if [ "$1" = "-parallel" ]
 else
     runApplication pimpleFoam
 fi
->>>>>>> master
 
 runApplication vorticity
 scripts/Allrun.post
