@@ -27,7 +27,7 @@ if __name__ == "__main__":
     parser.add_argument("--noshow", help="Do not call matplotlib show function",
                         default=False, action="store_true")
     parser.add_argument("-q", help="Quantities to plot", nargs="*",
-                        default=["alpha", "rel_vel_mag", "ct"])
+                        default=["alpha", "rel_vel_mag", "cc"])
     args = parser.parse_args()
 
     if "wake" in args.plot or args.all:
