@@ -19,7 +19,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate plots.")
     parser.add_argument("plot", nargs="*", help="What to plot", default="perf",
                         choices=["perf", "wake", "blade-perf", "strut-perf",
-                                 "perf-curves", "perf-curves-exp", "recovery"])
+                                 "perf-curves", "perf-curves-exp", "recovery",
+                                 "wake-profiles", "wake-profiles-exp"])
     parser.add_argument("--all", "-A", help="Generate all figures",
                         default=False, action="store_true")
     parser.add_argument("--save", "-s", help="Save to `figures` directory",
@@ -27,12 +28,16 @@ if __name__ == "__main__":
     parser.add_argument("--noshow", help="Do not call matplotlib show function",
                         default=False, action="store_true")
     parser.add_argument("-q", help="Quantities to plot", nargs="*",
-                        default=["alpha", "rel_vel_mag", "ct"])
+                        default=["alpha", "rel_vel_mag", "cc"])
     args = parser.parse_args()
 
     if "wake" in args.plot or args.all:
         plot_meancontquiv(save=args.save)
         plot_kcont(save=args.save)
+    if "wake-profiles" in args.plot or args.all:
+        plot_wake_profiles(save=args.save)
+    if "wake-profiles-exp" in args.plot or args.all:
+        plot_wake_profiles(exp=True, save=args.save)
     if "perf" in args.plot or args.all:
         plot_cp(save=args.save)
     if "blade-perf" in args.plot or args.all:

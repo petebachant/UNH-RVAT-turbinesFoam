@@ -20,9 +20,12 @@ internalField   uniform 0.001; // sqrt(3/2)*U*I*l
 
 boundaryField
 {
+<<<<<<< HEAD
     //- Set patchGroups for constraint patches
     #includeEtc "caseDicts/setConstraintTypes"
 
+=======
+>>>>>>> LES
     inlet
     {
         type            fixedValue;
@@ -54,6 +57,10 @@ boundaryField
         value           uniform 0;
     }
 
+    "proc.*"
+    {
+        type            processor;
+    }
 }
 
 

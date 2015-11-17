@@ -21,9 +21,6 @@ internalField   uniform 0;
 
 boundaryField
 {
-    //- Set patchGroups for constraint patches
-    #includeEtc "caseDicts/setConstraintTypes"
-
     inlet
     {
         type            calculated;
@@ -54,6 +51,10 @@ boundaryField
         value           uniform 0;
     }
 
+    "proc.*"
+    {
+        type            processor;
+    }
 }
 
 
