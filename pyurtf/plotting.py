@@ -15,7 +15,9 @@ labels = {"y_adv": r"$-V \frac{\partial U}{\partial y}$",
           "cc": "$C_c$",
           "cm": "$C_m$",
           "cn": "$C_n$",
-          "alpha_deg": "Angle of attack (degrees)"}
+          "alpha_deg": "Angle of attack (degrees)",
+          "meanu": r"$U/U_\infty$",
+          "k": r"$k/U_\infty^2$"}
 
 
 def plot_exp_lines(color="gray", linewidth=2):
@@ -258,3 +260,31 @@ def make_recovery_bar_chart(ax=None, save=False):
         figname = "recovery-bar-chart"
         fig.savefig("figures/{}.pdf".format(figname))
         fig.savefig("figures/{}.png".format(figname), dpi=300)
+
+
+def plot_wake_profiles(z_H=1e-5, exp=False, save=False):
+    """Plot profiles of mean streamwise velocity and TKE."""
+    fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
+    dfu = load_u_profile(z_H=z_H)
+    dfk = load_k_profile(z_H=z_H)
+    ax[0].plot(dfu.y_R, dfu.u, "-o", label="ALM")
+    ax[0].set_ylabel(labels["meanu"])
+    ax[1].plot(dfk.y_R, dfk.k_total, "-o", label="ALM")
+    ax[1].set_ylabel(labels["k"])
+    for a in ax:
+        a.set_xlabel("$y/R$")
+    if exp:
+        df = load_exp_wake()
+        df = df[df.z_H == np.round(z_H, decimals=3)]
+        ax[0].plot(df.y_R, df.mean_u, "^", markerfacecolor="none", label="Exp.")
+        ax[1].plot(df.y_R, df.k, "^", markerfacecolor="none", label="Exp.")
+        ax[0].legend(loc="lower left")
+    fig.tight_layout()
+    if save:
+        savefig(fig, "wake-profiles")
+
+
+def savefig(fig, figname):
+    """Save figure in `figures` directory as PDF and PNG."""
+    fig.savefig("figures/{}.pdf".format(figname))
+    fig.savefig("figures/{}.png".format(figname), dpi=300)

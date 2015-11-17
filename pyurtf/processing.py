@@ -251,5 +251,13 @@ def load_exp_recovery():
             "pressure_trans": np.nan}
 
 
+def load_exp_wake():
+    """Load wake measurement data. Must be run with IPython."""
+    exp_dir = os.path.join(os.path.expanduser("~"), "Google Drive", "Research",
+                           "Experiments", "RVAT Re dep")
+    df = pd.read_csv(os.path.join(exp_dir, "Data", "Processed", "Wake-1.0.csv"))
+    return df
+
+
 if __name__ == "__main__":
     pass
