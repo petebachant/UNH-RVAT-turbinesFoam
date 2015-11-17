@@ -47,7 +47,7 @@ boundaryField
     {
         type            zeroGradient;
     }
-    
+
     "proc.*"
     {
         type            processor;
