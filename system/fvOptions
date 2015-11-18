@@ -34,6 +34,7 @@ turbine
         tsrAmplitude        0.19;       // Amplitude for TSR oscillation
         tsrPhase            0.70;       // Angle of first peak (rad)
         rhoRef              1000;       // For calculating C_P, C_T, C_D
+        addedMass           on;
 
         dynamicStall
         {
@@ -91,14 +92,13 @@ turbine
             {
                 writePerf   true;
                 nElements   14;
+                endEffects  on;
                 elementProfiles (NACA0020);
                 elementData
                 ( // axialDistance, radius, azimuth, chord, chordMount, pitch
                     (-0.5 0.5 0.0 0.14 0.5 0.0)
                     ( 0.5 0.5 0.0 0.14 0.5 0.0)
                 );
-                tipEffectLength 1e2;
-                rootEffectLength $tipEffectLength;
             }
             blade2
             {

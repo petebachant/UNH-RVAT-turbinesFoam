@@ -1,5 +1,12 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Sample fields
+python scripts/gensampledict.py
+runApplication sample -latestTime
 
 # Post-process to calculate wake recovery terms
-execFlowFunctionObjects -dict system/controlDict.recovery -latestTime -noFlow | tee log.recovery
-funkyDoCalc system/funkyDoCalcDict -latestTime | tee log.funkyDoCalc
+runApplication execFlowFunctionObjects -dict system/controlDict.recovery -latestTime -noFlow
+runApplication funkyDoCalc system/funkyDoCalcDict -latestTime

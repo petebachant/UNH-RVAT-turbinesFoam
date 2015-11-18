@@ -22,7 +22,6 @@ internalField   uniform $turbulentKE;
 
 boundaryField
 {
-
     outlet
     {
         type            inletOutlet;
@@ -54,7 +53,11 @@ boundaryField
         type            kqRWallFunction;
         value           uniform 0.0;
     }
-
+    
+    "proc.*"
+    {
+        type            processor;
+    }
 }
 
 

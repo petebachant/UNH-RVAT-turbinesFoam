@@ -9,7 +9,7 @@ import numpy as np
 from subprocess import call
 import os
 import pandas as pd
-from py_unh_rvat_turbinesfoam import processing as pr
+from pyurtf import processing as pr
 
 
 def zero_tsr_fluc():
@@ -50,7 +50,7 @@ def tsr_sweep(start=0.4, stop=3.4, step=0.5, append=False):
             call("./Allclean")
             call("./Allrun")
         else:
-            call("pimpleFoam | tee log.pimpleFoam", shell=True)
+            call("pimpleFoam > log.pimpleFoam", shell=True)
         os.rename("log.pimpleFoam", "log.pimpleFoam." + str(tsr))
         log_perf(append=True)
     # Checkout original fvOptions

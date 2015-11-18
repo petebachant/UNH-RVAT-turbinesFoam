@@ -10,7 +10,14 @@ labels = {"y_adv": r"$-V \frac{\partial U}{\partial y}$",
           "z_adv": r"$-W \frac{\partial U}{\partial z}$",
           "turb_trans": r"Turb. trans.",
           "pressure_trans": r"$-\frac{\partial P}{\partial x}$",
-          "visc_trans": r"Visc. trans."}
+          "visc_trans": r"Visc. trans.",
+          "rel_vel_mag": "Relative velocity (m/s)",
+          "cc": "$C_c$",
+          "cm": "$C_m$",
+          "cn": "$C_n$",
+          "alpha_deg": "Angle of attack (degrees)",
+          "meanu": r"$U/U_\infty$",
+          "k": r"$k/U_\infty^2$"}
 
 
 def plot_exp_lines(color="gray", linewidth=2):
@@ -153,7 +160,6 @@ def plot_perf_curves(exp=False, save=False):
     ax[0].set_ylabel(r"$C_P$")
     ax[1].plot(df.tsr, df.cd, "-o", label="ALM")
     ax[1].set_ylabel(r"$C_D$")
-    ax[1].set_ylim((0, None))
     for a in ax:
         a.set_xlabel(r"$\lambda$")
     if exp:
@@ -162,6 +168,7 @@ def plot_perf_curves(exp=False, save=False):
         ax[1].plot(df_exp.mean_tsr, df_exp.mean_cd, "^", label="Exp.",
                    markerfacecolor="none")
         ax[1].legend(loc="lower right")
+    ax[1].set_ylim((0, None))
     fig.tight_layout()
     if save:
         figname = "perf-curves"
@@ -169,14 +176,19 @@ def plot_perf_curves(exp=False, save=False):
         plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
-def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False):
+def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False,
+                 quantities=["alpha", "rel_vel_mag", "cc"]):
+    if isinstance(quantities, str):
+        quantities = [quantities]
     df_turb = pd.read_csv("postProcessing/turbines/0/turbine.csv")
     df_turb = df_turb.drop_duplicates("time", take_last=True)
     df = pd.read_csv("postProcessing/actuatorLines/0/{}.csv".format(name))
     df = df.drop_duplicates("time", take_last=True)
     df["angle_deg"] = df_turb.angle_deg
-    df["ct"] = df.cl*np.sin(np.deg2rad(df.alpha_deg)) \
+    df["cc"] = df.cl*np.sin(np.deg2rad(df.alpha_deg)) \
              - df.cd*np.cos(np.deg2rad(df.alpha_deg))
+    df["cn"] = df.cl*np.cos(np.deg2rad(df.alpha_deg)) \
+             - df.cd*np.sin(np.deg2rad(df.alpha_deg))
     df = df[df.angle_deg >= theta1]
     if theta2 is not None:
         df = df[df.angle_deg <= theta2]
@@ -186,31 +198,37 @@ def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False):
         theta1 -= offset
         if theta2 is not None:
             theta2 -= offset
-    fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=3)
-    ax[0].plot(df.angle_deg, df.alpha_deg, label="Actual")
-    ax[0].plot(df.angle_deg, df.alpha_geom_deg, label="Geometric")
-    ax[0].set_ylabel("Angle of attack (degrees)")
-    ax[0].legend(loc="best")
-    ax[1].plot(df.angle_deg, df.rel_vel_mag)
-    ax[1].set_ylabel("Relative velocity (m/s)")
-    ax[2].plot(df.angle_deg, df.ct)
-    ax[2].set_ylabel("$C_T$")
-    for a in ax:
+    if len(quantities) > 1:
+        fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1,
+                               ncols=len(quantities))
+    else:
+        fig, ax = plt.subplots()
+        ax = [ax]
+    for a, q in zip(ax, quantities):
+        if q == "alpha":
+            a.plot(df.angle_deg, df.alpha_deg, label="Actual")
+            a.plot(df.angle_deg, df.alpha_geom_deg, label="Geometric")
+            a.set_ylabel("Angle of attack (degrees)")
+            a.legend(loc="best")
+        else:
+            a.plot(df.angle_deg, df[q])
+            a.set_ylabel(labels[q])
         a.set_xlim((theta1, theta2))
         a.set_xlabel(r"$\theta$ (degrees)")
     fig.tight_layout()
 
 
-def plot_blade_perf(theta1=0, theta2=None, remove_offset=False, save=False):
-    plot_al_perf("blade1", theta1, theta2, remove_offset)
+def plot_blade_perf(theta1=0, theta2=None, remove_offset=False, save=False,
+                    **kwargs):
+    plot_al_perf("blade1", theta1, theta2, remove_offset, **kwargs)
     if save:
         figname = "blade-perf"
         plt.savefig("figures/" + figname + ".pdf")
         plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
-def plot_strut_perf(save=False):
-    plot_al_perf("strut1")
+def plot_strut_perf(save=False, **kwargs):
+    plot_al_perf("strut1", **kwargs)
     if save:
         figname = "strut-perf"
         plt.savefig("figures/" + figname + ".pdf")
@@ -242,3 +260,31 @@ def make_recovery_bar_chart(ax=None, save=False):
         figname = "recovery-bar-chart"
         fig.savefig("figures/{}.pdf".format(figname))
         fig.savefig("figures/{}.png".format(figname), dpi=300)
+
+
+def plot_wake_profiles(z_H=1e-5, exp=False, save=False):
+    """Plot profiles of mean streamwise velocity and TKE."""
+    fig, ax = plt.subplots(figsize=(7.5, 3.5), nrows=1, ncols=2)
+    dfu = load_u_profile(z_H=z_H)
+    dfk = load_k_profile(z_H=z_H)
+    ax[0].plot(dfu.y_R, dfu.u, "-o", label="ALM")
+    ax[0].set_ylabel(labels["meanu"])
+    ax[1].plot(dfk.y_R, dfk.k_total, "-o", label="ALM")
+    ax[1].set_ylabel(labels["k"])
+    for a in ax:
+        a.set_xlabel("$y/R$")
+    if exp:
+        df = load_exp_wake()
+        df = df[df.z_H == np.round(z_H, decimals=3)]
+        ax[0].plot(df.y_R, df.mean_u, "^", markerfacecolor="none", label="Exp.")
+        ax[1].plot(df.y_R, df.k, "^", markerfacecolor="none", label="Exp.")
+        ax[0].legend(loc="lower left")
+    fig.tight_layout()
+    if save:
+        savefig(fig, "wake-profiles")
+
+
+def savefig(fig, figname):
+    """Save figure in `figures` directory as PDF and PNG."""
+    fig.savefig("figures/{}.pdf".format(figname))
+    fig.savefig("figures/{}.png".format(figname), dpi=300)
