@@ -35,25 +35,25 @@ boundaryField
     walls
     {
         type        fixedValue;
-        value       uniform (1 0 0);
+        value       $internalField;
     }
 
     top
     {
         type        pressureInletOutletVelocity;
         tangentialVelocity $internalField;
-        value       uniform (1 0 0);
+        value       $internalField;
     }
 
     bottom
     {
         type        fixedValue;
-        value       uniform (1 0 0);
+        value       $internalField;
     }
 
     "proc.*"
     {
-        type            processor;
+        type        processor;
     }
 }
 

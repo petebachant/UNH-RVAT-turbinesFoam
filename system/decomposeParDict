@@ -21,7 +21,7 @@ method          hierarchical;
 
 hierarchicalCoeffs
 {
-    n               (1 1 2);
+    n               (1 2 1);
     delta           0.001;
     order           xyz;
 }
