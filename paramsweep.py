@@ -12,9 +12,9 @@ import pandas as pd
 from pyurtf import processing as pr
 
 
-def zero_tsr_fluc():
+def set_tsr_fluc(val=0.0):
     """Set TSR fluctuation amplitude to zero."""
-    replace_value("system/fvOptions", "tsrAmplitude", 0.0)
+    replace_value("system/fvOptions", "tsrAmplitude", val)
 
 
 def set_tsr(val):
@@ -41,7 +41,7 @@ def tsr_sweep(start=0.4, stop=3.4, step=0.5, append=False):
     if not append and os.path.isfile("processed/tsr_sweep.csv"):
         os.remove("processed/tsr_sweep.csv")
     tsrs = np.arange(start, stop + 0.5*step, step)
-    zero_tsr_fluc()
+    set_tsr_fluc(0.0)
     cp = []
     cd = []
     for tsr in tsrs:
@@ -50,11 +50,13 @@ def tsr_sweep(start=0.4, stop=3.4, step=0.5, append=False):
             call("./Allclean")
             call("./Allrun")
         else:
+            print("Running pimpleFoam")
             call("pimpleFoam > log.pimpleFoam", shell=True)
         os.rename("log.pimpleFoam", "log.pimpleFoam." + str(tsr))
         log_perf(append=True)
-    # Checkout original fvOptions
-    call(["git", "checkout", "system/fvOptions"])
+    # Set TSR parameters back to default
+    set_tsr(1.9)
+    set_tsr_fluc(0.19)
 
 
 if __name__ == "__main__":
