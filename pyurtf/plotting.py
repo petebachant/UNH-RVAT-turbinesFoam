@@ -129,7 +129,7 @@ def plot_turb_lines(half=False, color="gray"):
 
 def plot_cp(ax=None, angle0=540.0, save=False):
     df = pd.read_csv("postProcessing/turbines/0/turbine.csv")
-    df = df.drop_duplicates("time", take_last=True)
+    df = df.drop_duplicates("time", keep="last")
     if df.angle_deg.max() < angle0:
         angle0 = 0.0
     print("Performance from {:.1f}--{:.1f} degrees:".format(angle0,
@@ -181,9 +181,9 @@ def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False,
     if isinstance(quantities, str):
         quantities = [quantities]
     df_turb = pd.read_csv("postProcessing/turbines/0/turbine.csv")
-    df_turb = df_turb.drop_duplicates("time", take_last=True)
+    df_turb = df_turb.drop_duplicates("time", keep="last")
     df = pd.read_csv("postProcessing/actuatorLines/0/{}.csv".format(name))
-    df = df.drop_duplicates("time", take_last=True)
+    df = df.drop_duplicates("time", keep="last")
     df["angle_deg"] = df_turb.angle_deg
     df["cc"] = df.cl*np.sin(np.deg2rad(df.alpha_deg)) \
              - df.cd*np.cos(np.deg2rad(df.alpha_deg))
