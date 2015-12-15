@@ -116,7 +116,7 @@ def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
         else:
             print("Running pimpleFoam")
             run_solver(parallel=parallel)
-        os.rename("log.pimpleFoam", "log.pimpleFoam." + str(tsr))
+        os.rename("log.pimpleFoam", "log.pimpleFoam." + str(p))
         log_perf(param=param, append=True)
     # Set parameters back to defaults
     if param == "tsr":
