@@ -96,7 +96,7 @@ def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
             set_blockmesh_resolution(nx=p)
         elif param == "timestep":
             set_timestep(p)
-        if p == param_list[0]:
+        if p == param_list[0] or param == "nx":
             call("./Allclean")
             print("Running blockMesh")
             call("blockMesh > log.blockMesh", shell=True)
