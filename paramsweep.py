@@ -56,7 +56,7 @@ def set_blockmesh_resolution(nx=32, ny=None, nz=None):
     simpleGrading (1 1 1)
 );
 """.format(resline)
-    foampy.dictionaries.replace_value("constant/polyMesh/blockMeshDict",
+    foampy.dictionaries.replace_value("system/blockMeshDict",
                                       "blocks", blocks)
 
 

@@ -1,13 +1,12 @@
 [0-9]*.[0-9]*
 [0-9]*
-constant/polyMesh/*
+constant/polyMesh
 *.OpenFOAM
 log.*
 *.pyc
 !0.org
 system/sampleDict
 *.pvsm
-!constant/polyMesh/blockMeshDict
 figures
 processed
 dynamicCode
