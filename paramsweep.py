@@ -9,6 +9,7 @@ from foampy.dictionaries import replace_value
 import numpy as np
 from subprocess import call
 import os
+import shutil
 import pandas as pd
 from pyurtf import processing as pr
 
@@ -48,7 +49,7 @@ def set_blockmesh_resolution(nx=32, ny=None, nz=None):
         ny = nx
     if nz is None:
         nz = int(nx*defaults["nz"]/defaults["nx"])
-    resline = "({nx} {ny} {nz})".format(nx=nx, ny=ny, nz=nz)
+    resline = "({nx} {ny} {nz})".format(nx=int(nx), ny=int(ny), nz=int(nz))
     blocks = """blocks
 (
     hex (0 1 2 3 4 5 6 7)
@@ -66,28 +67,80 @@ def set_timestep(dt=0.01):
     foampy.dictionaries.replace_value("system/controlDict", "deltaT", dt)
 
 
-def tsr_sweep(start=0.4, stop=3.4, step=0.5, append=False):
-    """Run over multiple TSRs. `stop` will be included."""
-    if not append and os.path.isfile("processed/tsr_sweep.csv"):
-        os.remove("processed/tsr_sweep.csv")
-    tsrs = np.arange(start, stop + 0.5*step, step)
-    set_tsr_fluc(0.0)
-    cp = []
-    cd = []
-    for tsr in tsrs:
-        set_tsr(tsr)
-        if tsr == tsrs[0]:
+def run_solver(parallel=True):
+    """Run `pimpleFoam`."""
+    if parallel:
+        call("mpirun -np 2 pimpleFoam -parallel > log.pimpleFoam", shell=True)
+    else:
+        call("pimpleFoam > log.pimpleFoam", shell=True)
+
+
+def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
+                append=False, parallel=True):
+    """Run multiple simulations, varying `quantity`.
+
+    `step` is not included.
+    """
+    print("Running {} sweep".format(param))
+    fpath = "processed/{}_sweep.csv".format(param)
+    if param == "nx":
+        dtype = int
+    param_list = np.arange(start, stop, step, dtype=dtype)
+    if param == "tsr":
+        set_tsr_fluc(0.0)
+    for p in param_list:
+        print("Setting {} to {}".format(param, p))
+        if param == "tsr":
+            set_tsr(p)
+        elif param == "nx":
+            set_blockmesh_resolution(nx=p)
+        elif param == "timestep":
+            set_timestep(p)
+        if p == param_list[0]:
             call("./Allclean")
-            call("./Allrun")
+            print("Running blockMesh")
+            call("blockMesh > log.blockMesh", shell=True)
+            print("Running snappyHexMesh")
+            call("snappyHexMesh -overwrite > log.snappyHexMesh", shell=True)
+            print("Running topoSet")
+            call("topoSet > log.topoSet", shell=True)
+            shutil.copytree("0.org", "0")
+            if parallel:
+                print("Running decomposePar")
+                call("decomposePar > log.decomposePar", shell=True)
+                call("ls -d processor* | xargs -I {} rm -rf ./{}/0", shell=True)
+                call("ls -d processor* | xargs -I {} cp -r 0.org ./{}/0",
+                     shell=True)
+            print("Running pimpleFoam")
+            run_solver(parallel=parallel)
         else:
             print("Running pimpleFoam")
-            call("pimpleFoam > log.pimpleFoam", shell=True)
+            run_solver(parallel=parallel)
         os.rename("log.pimpleFoam", "log.pimpleFoam." + str(tsr))
-        log_perf(append=True)
-    # Set TSR parameters back to default
-    set_tsr(1.9)
-    set_tsr_fluc(0.19)
+        log_perf(param=param, append=True)
+    # Set parameters back to defaults
+    if param == "tsr":
+        set_tsr(1.9)
+        set_tsr_fluc(0.19)
+    elif param == "nx":
+        set_blockmesh_resolution()
+    elif param == "timestep":
+        set_timestep()
 
 
 if __name__ == "__main__":
-    tsr_sweep(0.4, 3.4, 0.5, append=False)
+    import argparse
+    parser = argparse.ArgumentParser(description="Run mulitple simulations, "
+                                     "varying a single parameter.")
+    parser.add_argument("parameter", default="tsr", help="Parameter to vary",
+                        nargs="?")
+    parser.add_argument("start", default=0.4, type=float, nargs="?")
+    parser.add_argument("stop", default=3.5, type=float, nargs="?")
+    parser.add_argument("step", default=0.5, type=float, nargs="?")
+    parser.add_argument("--parallel", default=True, type=bool)
+    parser.add_argument("--append", "-a", default=False, action="store_true")
+
+    args = parser.parse_args()
+
+    param_sweep(args.parameter, args.start, args.stop, args.step,
+                append=args.append, parallel=args.parallel)
