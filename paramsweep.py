@@ -3,6 +3,7 @@
 Run multiple simulations varying a single parameter.
 """
 
+from __future__ import division, print_function
 import foampy
 from foampy.dictionaries import replace_value
 import numpy as np
@@ -34,6 +35,35 @@ def log_perf(param="tsr", append=True):
         df = pd.DataFrame(columns=["tsr", "cp", "cd"])
     df = df.append(pr.calc_perf(t1=3.0), ignore_index=True)
     df.to_csv(fpath, index=False)
+
+
+def set_blockmesh_resolution(nx=32, ny=None, nz=None):
+    """Set mesh resolution in `blockMeshDict`.
+
+    If only `nx` is provided, the default resolutions for other dimensions are
+    scaled proportionally.
+    """
+    defaults = {"nx": 32, "ny": 32, "nz": 24}
+    if ny is None:
+        ny = nx
+    if nz is None:
+        nz = int(nx*defaults["nz"]/defaults["nx"])
+    resline = "({nx} {ny} {nz})".format(nx=nx, ny=ny, nz=nz)
+    blocks = """blocks
+(
+    hex (0 1 2 3 4 5 6 7)
+    {}
+    simpleGrading (1 1 1)
+);
+""".format(resline)
+    foampy.dictionaries.replace_value("constant/polyMesh/blockMeshDict",
+                                      "blocks", blocks)
+
+
+def set_timestep(dt=0.01):
+    """Set `deltaT` in `controlDict`."""
+    dt = str(dt)
+    foampy.dictionaries.replace_value("system/controlDict", "deltaT", dt)
 
 
 def tsr_sweep(start=0.4, stop=3.4, step=0.5, append=False):
