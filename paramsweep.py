@@ -7,11 +7,24 @@ from __future__ import division, print_function
 import foampy
 from foampy.dictionaries import replace_value
 import numpy as np
-from subprocess import call
+from subprocess import call, check_output
 import os
 import shutil
 import pandas as pd
 from pyurtf import processing as pr
+
+
+def get_mesh_dims():
+    """Get mesh dimensions by grepping `blockMeshDict`."""
+    raw = check_output("grep blocks system/blockMeshDict -A3",
+                       shell=True).decode().split("\n")[3]
+    raw = raw.replace("(", "").replace(")", "").split()
+    return {"nx": int(raw[0]), "ny": int(raw[1]), "nz": int(raw[2])}
+
+
+def get_timestep():
+    """Read `deltaT` from `controlDict`."""
+    return foampy.dictionaries.read_single_line_value("controlDict", "deltaT")
 
 
 def set_tsr_fluc(val=0.0):
@@ -33,8 +46,11 @@ def log_perf(param="tsr", append=True):
     if append and os.path.isfile(fpath):
         df = pd.read_csv(fpath)
     else:
-        df = pd.DataFrame(columns=["tsr", "cp", "cd"])
-    df = df.append(pr.calc_perf(t1=3.0), ignore_index=True)
+        df = pd.DataFrame(columns=["nx", "ny", "nz", "dt", "tsr", "cp", "cd"])
+    d = pr.calc_perf(t1=3.0)
+    d.update(get_mesh_dims())
+    d["dt"] = get_timestep()
+    df = df.append(d, ignore_index=True)
     df.to_csv(fpath, index=False)
 
 
