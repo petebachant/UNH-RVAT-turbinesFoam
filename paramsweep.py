@@ -83,6 +83,8 @@ def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
     """
     print("Running {} sweep".format(param))
     fpath = "processed/{}_sweep.csv".format(param)
+    if not append and os.path.isfile(fpath):
+        os.remove(fpath)
     if param == "nx":
         dtype = int
     param_list = np.arange(start, stop, step, dtype=dtype)
