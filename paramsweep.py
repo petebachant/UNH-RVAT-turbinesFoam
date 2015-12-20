@@ -22,7 +22,7 @@ def get_mesh_dims():
     return {"nx": int(raw[0]), "ny": int(raw[1]), "nz": int(raw[2])}
 
 
-def get_timestep():
+def get_dt():
     """Read `deltaT` from `controlDict`."""
     return foampy.dictionaries.read_single_line_value("controlDict", "deltaT")
 
@@ -49,7 +49,7 @@ def log_perf(param="tsr", append=True):
         df = pd.DataFrame(columns=["nx", "ny", "nz", "dt", "tsr", "cp", "cd"])
     d = pr.calc_perf(t1=3.0)
     d.update(get_mesh_dims())
-    d["dt"] = get_timestep()
+    d["dt"] = get_dt()
     df = df.append(d, ignore_index=True)
     df.to_csv(fpath, index=False)
 
@@ -77,7 +77,7 @@ def set_blockmesh_resolution(nx=32, ny=None, nz=None):
                                       "blocks", blocks)
 
 
-def set_timestep(dt=0.01):
+def set_dt(dt=0.01):
     """Set `deltaT` in `controlDict`."""
     dt = str(dt)
     foampy.dictionaries.replace_value("system/controlDict", "deltaT", dt)
@@ -112,8 +112,8 @@ def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
             set_tsr(p)
         elif param == "nx":
             set_blockmesh_resolution(nx=p)
-        elif param == "timestep":
-            set_timestep(p)
+        elif param == "dt":
+            set_dt(p)
         if p == param_list[0] or param == "nx":
             call("./Allclean")
             print("Running blockMesh")
@@ -142,8 +142,8 @@ def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
         set_tsr_fluc(0.19)
     elif param == "nx":
         set_blockmesh_resolution()
-    elif param == "timestep":
-        set_timestep()
+    elif param == "dt":
+        set_dt()
 
 
 if __name__ == "__main__":
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run mulitple simulations, "
                                      "varying a single parameter.")
     parser.add_argument("parameter", default="tsr", help="Parameter to vary",
-                        nargs="?")
+                        nargs="?", choices=["tsr", "nx", "dt"])
     parser.add_argument("start", default=0.4, type=float, nargs="?")
     parser.add_argument("stop", default=3.5, type=float, nargs="?")
     parser.add_argument("step", default=0.5, type=float, nargs="?")
