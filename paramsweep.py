@@ -86,7 +86,7 @@ def set_dt(dt=0.01):
 def run_solver(parallel=True):
     """Run `pimpleFoam`."""
     if parallel:
-        call("mpirun -np 2 pimpleFoam -parallel > log.pimpleFoam", shell=True)
+        call("mpirun -np 4 pimpleFoam -parallel > log.pimpleFoam", shell=True)
     else:
         call("pimpleFoam > log.pimpleFoam", shell=True)
 
