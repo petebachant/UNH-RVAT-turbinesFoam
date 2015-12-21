@@ -290,7 +290,7 @@ def plot_verification(save=False):
     if os.path.isfile(dt_fpath):
         df_dt = pd.read_csv(dt_fpath)
         df_dt["steps_per_rev"] = 1.0/(df_dt.tsr/R*U/(2.0*np.pi))/df_dt.dt
-        ax[0].plot(df_dt.steps_per_rev, df_dt.cp, "-o")
+        ax[0].plot(df_dt.steps_per_rev, df_dt.cp, "o")
         ax[0].set_xlabel("Time steps per rev.")
         ax[0].set_ylabel(r"$C_P$")
     if os.path.isfile(nx_fpath):
