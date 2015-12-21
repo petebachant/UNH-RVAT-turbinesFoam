@@ -60,7 +60,7 @@ def set_blockmesh_resolution(nx=32, ny=None, nz=None):
     If only `nx` is provided, the default resolutions for other dimensions are
     scaled proportionally.
     """
-    defaults = {"nx": 32, "ny": 32, "nz": 24}
+    defaults = {"nx": 70, "ny": 80, "nz": 50}
     if ny is None:
         ny = nx
     if nz is None:
