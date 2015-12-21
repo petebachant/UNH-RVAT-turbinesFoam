@@ -1,8 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-Processing functions for crossFlowTurbineAL tutorial.
-"""
+"""Processing functions for UNH-RVAT turbinesFoam case."""
+
 from __future__ import division, print_function
 import matplotlib.pyplot as plt
 import re
