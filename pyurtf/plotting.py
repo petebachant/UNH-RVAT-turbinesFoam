@@ -1,6 +1,4 @@
-"""
-Plotting functions
-"""
+"""Plotting functions."""
 
 from .processing import *
 import matplotlib.pyplot as plt
@@ -282,6 +280,27 @@ def plot_wake_profiles(z_H=1e-5, exp=False, save=False):
     fig.tight_layout()
     if save:
         savefig(fig, "wake-profiles")
+
+
+def plot_verification(save=False):
+    """Plot spatial and temporal grid dependence."""
+    fig, ax = plt.subplots(figsize=(7.5, 3.5), ncols=2)
+    dt_fpath = "processed/dt_sweep.csv"
+    nx_fpath = "processed/nx_sweep.csv"
+    if os.path.isfile(dt_fpath):
+        df_dt = pd.read_csv(dt_fpath)
+        df_dt["steps_per_rev"] = 1.0/(df_dt.tsr/R*U/(2.0*np.pi))/df_dt.dt
+        ax[0].plot(df_dt.steps_per_rev, df_dt.cp, "-o")
+        ax[0].set_xlabel("Time steps per rev.")
+        ax[0].set_ylabel(r"$C_P$")
+    if os.path.isfile(nx_fpath):
+        df_nx = pd.read_csv(nx_fpath)
+        ax[1].plot(df_nx.nx, df_nx.cp, "o")
+        ax[1].set_xlabel(r"$N_x$")
+        ax[1].set_ylabel(r"$C_P$")
+    fig.tight_layout()
+    if save:
+        savefig(fig, "verification")
 
 
 def savefig(fig, figname):
