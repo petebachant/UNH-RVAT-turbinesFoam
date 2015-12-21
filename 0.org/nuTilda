@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2.4.x                                 |
+|  \\    /   O peration     | Version:  3.0.x                                 |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -20,12 +20,6 @@ internalField   uniform 0.001; // sqrt(3/2)*U*I*l
 
 boundaryField
 {
-<<<<<<< HEAD
-    //- Set patchGroups for constraint patches
-    #includeEtc "caseDicts/setConstraintTypes"
-
-=======
->>>>>>> LES
     inlet
     {
         type            fixedValue;
