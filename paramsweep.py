@@ -77,7 +77,7 @@ def set_blockmesh_resolution(nx=32, ny=None, nz=None):
                                       "blocks", blocks)
 
 
-def set_dt(dt=0.01):
+def set_dt(dt=0.005):
     """Set `deltaT` in `controlDict`."""
     dt = str(dt)
     foampy.dictionaries.replace_value("system/controlDict", "deltaT", dt)
