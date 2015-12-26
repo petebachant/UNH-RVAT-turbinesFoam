@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-"""
-Run multiple simulations varying a single parameter.
-"""
+"""Run multiple simulations varying a single parameter."""
 
 from __future__ import division, print_function
 import foampy
