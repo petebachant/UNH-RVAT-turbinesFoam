@@ -32,11 +32,10 @@ geometry
     turbine
     {
         type searchableCylinder;
-        point1 (0 0 -0.75);
-        point2 (0 0 0.75);
-        radius 0.75;
+        point1 (0 0 -0.64);
+        point2 (0 0 0.64);
+        radius 0.64;
     }
-
     refinementBox
     {
         type searchableBox;
@@ -132,16 +131,15 @@ castellatedMeshControls
 
     refinementRegions
     {
-        //~ turbine
-        //~ {
-            //~ mode inside;
-            //~ levels ((1 1));
-        //~ }
-
-        refinementBox
+        turbine
         {
             mode        inside;
             levels      ((1e15 2));
+        }
+        refinementBox
+        {
+            mode        inside;
+            levels      ((1e15 1));
         }
     }
 
