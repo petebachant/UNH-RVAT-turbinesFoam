@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2.4.x                                 |
+|  \\    /   O peration     | Version:  3.0.x                                 |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -32,16 +32,15 @@ geometry
     turbine
     {
         type searchableCylinder;
-        point1 (0 0 -0.75);
-        point2 (0 0 0.75);
-        radius 0.75;       
+        point1 (0 0 -0.64);
+        point2 (0 0 0.64);
+        radius 0.64;
     }
-    
-    turb_zone
+    refinementBox
     {
         type searchableBox;
-        min (-0.9 -0.9 -0.8);
-        max (5.0 0.9 0.8);
+        min (-0.7 -0.8 -0.8);
+        max (5.0 0.8 0.8);
     }
 };
 
@@ -132,13 +131,12 @@ castellatedMeshControls
 
     refinementRegions
     {
-        //~ turbine
-        //~ {
-            //~ mode inside;
-            //~ levels ((1 1));
-        //~ }
-        
-        turb_zone
+        // turbine
+        // {
+        //     mode        inside;
+        //     levels      ((1e15 2));
+        // }
+        refinementBox
         {
             mode        inside;
             levels      ((1e15 2));
