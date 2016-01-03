@@ -62,7 +62,7 @@ def set_blockmesh_resolution(nx=32, ny=None, nz=None):
     """
     defaults = {"nx": 70, "ny": 80, "nz": 50}
     if ny is None:
-        ny = nx
+        ny = int(nx*defaults["ny"]/defaults["nx"])
     if nz is None:
         nz = int(nx*defaults["nz"]/defaults["nx"])
     resline = "({nx} {ny} {nz})".format(nx=int(nx), ny=int(ny), nz=int(nz))
