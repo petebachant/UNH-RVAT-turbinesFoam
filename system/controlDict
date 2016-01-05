@@ -99,7 +99,7 @@ functions
 DebugSwitches
 {
     crossFlowTurbineALSource 0;
-    actuatorLineSource  0;
+    actuatorLineSource 0;
     actuatorLineElement 0;
     LeishmanBeddoes 0;
     LeishmanBeddoes3G 0;
