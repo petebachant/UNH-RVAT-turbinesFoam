@@ -60,39 +60,39 @@ solvers
 
 PIMPLE
 {
-    correctPhi          no;
     nOuterCorrectors    1;
     nCorrectors         2;
     nNonOrthogonalCorrectors 0;
-    turbOnFinalIterOnly true;
+    pRefCell        1001;
+    pRefValue       0;
 
-    //~ residualControl
-    //~ {
-        //~ U
-        //~ {
-            //~ tolerance 1e-6;
-            //~ relTol 0;
-        //~ }
-        //~ p
-        //~ {
-            //~ tolerance 5e-4;
-            //~ relTol 0;
-        //~ }
-    //~ }
+    // residualControl
+    // {
+    //     U
+    //     {
+    //         tolerance 1e-3;
+    //         relTol 0;
+    //     }
+    //     p
+    //     {
+    //         tolerance 1e-2;
+    //         relTol 0;
+    //     }
+    // }
 }
 
-//~ relaxationFactors
-//~ {
-    //~ fields
-    //~ {
-        //~ p   1;
-    //~ }
-    //~ equations
-    //~ {
-        //~ "(U|k|epsilon)"      1;
-        //~ "(U|k|epsilon)Final" 1;
-    //~ }
-//~ }
+// relaxationFactors
+// {
+//     fields
+//     {
+//         p                   0.7;
+//     }
+//     equations
+//     {
+//         "(U|k|omega|epsilon)"       0.8;
+//         "(U|k|omega|epsilon)Final"  1;
+//     }
+// }
 
 cache
 {
