@@ -32,7 +32,6 @@ def set_tsr_fluc(val=0.0):
 
 def set_tsr(val):
     """Set mean tip speed ratio."""
-    print("Setting TSR to", val)
     replace_value("system/fvOptions", "tipSpeedRatio", val)
 
 
