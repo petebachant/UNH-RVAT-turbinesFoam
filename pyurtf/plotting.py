@@ -294,13 +294,13 @@ def plot_verification(save=False):
         ax[0].plot(df_dt.steps_per_rev, df_dt.cp, "o")
         ax[0].set_xlabel("Time steps per rev.")
         ax[0].set_ylabel(r"$C_P$")
-        ax[0].set_ylim(ylim)
+        # ax[0].set_ylim(ylim)
     if os.path.isfile(nx_fpath):
         df_nx = pd.read_csv(nx_fpath)
         ax[1].plot(df_nx.nx, df_nx.cp, "o")
         ax[1].set_xlabel(r"$N_x$")
         ax[1].set_ylabel(r"$C_P$")
-        ax[1].set_ylim(ylim)
+        # ax[1].set_ylim(ylim)
     fig.tight_layout()
     if save:
         savefig(fig, "verification")
