@@ -131,11 +131,11 @@ castellatedMeshControls
 
     refinementRegions
     {
-        turbine
-        {
-            mode        distance;
-            levels      ((0.14 2));
-        }
+        // turbine
+        // {
+        //     mode        distance;
+        //     levels      ((0.14 2));
+        // }
         refinementBox
         {
             mode        inside;
