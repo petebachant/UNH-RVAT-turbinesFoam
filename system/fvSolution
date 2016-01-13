@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2.4.x                                 |
+|  \\    /   O peration     | Version:  3.0.x                                 |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -65,34 +65,7 @@ PIMPLE
     nNonOrthogonalCorrectors 0;
     pRefCell        1001;
     pRefValue       0;
-
-    // residualControl
-    // {
-    //     U
-    //     {
-    //         tolerance 1e-3;
-    //         relTol 0;
-    //     }
-    //     p
-    //     {
-    //         tolerance 1e-2;
-    //         relTol 0;
-    //     }
-    // }
 }
-
-// relaxationFactors
-// {
-//     fields
-//     {
-//         p                   0.7;
-//     }
-//     equations
-//     {
-//         "(U|k|omega|epsilon)"       0.8;
-//         "(U|k|omega|epsilon)Final"  1;
-//     }
-// }
 
 cache
 {
