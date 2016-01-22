@@ -140,6 +140,9 @@ def plot_cp(ax=None, angle0=540.0, save=False):
     ax.plot(df.angle_deg, df.cp)
     ax.set_xlabel("Azimuthal angle (degrees)")
     ax.set_ylabel("$C_P$")
+    ymin, ymax = None, None
+    if df.cp.max() > 2 or df.cp.min() < -0.5:
+        ax.set_ylim((-0.1, 0.7))
     plt.tight_layout()
     if save:
         figname = "cp"
