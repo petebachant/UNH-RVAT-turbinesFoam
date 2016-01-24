@@ -90,7 +90,7 @@ turbine
             blade1
             {
                 writePerf   true;
-                nElements   14;
+                nElements   28;
                 endEffects  on;
                 elementProfiles (NACA0020);
                 elementData
@@ -117,7 +117,7 @@ turbine
             strut1
             {
                 writePerf   true;
-                nElements   6;
+                nElements   14;
                 elementProfiles (NACA0020);
                 elementData
                 ( // axialDistance, radius, azimuth, chord, chordMount, pitch
@@ -140,7 +140,7 @@ turbine
 
         shaft
         {
-            nElements   20;
+            nElements   50;
             elementProfiles (cylinder);
             elementData
             ( // axialDistance, diameter
@@ -153,7 +153,7 @@ turbine
         {
             NACA0020
             {
-                // Re      1.6e5;
+                Re      1.6e5;
                 data
                 (   // alpha C_l C_d
                     #include "NACA0021_1.6e5"
