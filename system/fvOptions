@@ -23,7 +23,7 @@ turbine
 
     crossFlowTurbineALSourceCoeffs
     {
-        fieldNames          (U);
+        fieldNames          (U k epsilon);
         selectionMode       cellSet;
         cellSet             turbine;
         origin              (0 0 0);
@@ -133,6 +133,16 @@ turbine
                 (   // alpha C_l C_d
                     #include "NACA0021_1.6e5"
                 );
+                turbulenceInjection
+                {
+                    // Linear regressions of static blade-resolved 2-D RANS
+                    kSlope 0.7;
+                    kIntercept -0.006;
+                    kMax 0.07;
+                    epsilonSlope 0.8;
+                    epsilonIntercept -3e-4;
+                    epsilonMax 0.08;
+                }
             }
             cylinder
             {
