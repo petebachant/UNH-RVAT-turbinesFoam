@@ -140,7 +140,7 @@ turbine
 
         shaft
         {
-            nElements   50;
+            nElements   15;
             elementProfiles (cylinder);
             elementData
             ( // axialDistance, diameter
