@@ -40,9 +40,9 @@ functions
             const volScalarField UMeanX = UMean.component(0);
             const volScalarField& pMean
                 = mesh().lookupObject<volScalarField>("pMean");
-            
+
             volVectorField gradPMean = fvc::grad(pMean);
-            
+
             volScalarField gradPMeanX
             (
                 IOobject
@@ -55,7 +55,7 @@ functions
                 ),
                 gradPMean.component(0)
             );
-            
+
             volVectorField gradUMeanX
             (
                 IOobject
