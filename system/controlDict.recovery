@@ -24,7 +24,7 @@ functions
     {
         functionObjectLibs ("libfieldFunctionObjects.so");
         type            readFields;
-        fields          (pMean UMean kMean);
+        fields          (pMean UMean kMean turbulenceProperties:RMean);
     }
 
     recoveryTerms
@@ -40,6 +40,11 @@ functions
             const volScalarField UMeanX = UMean.component(0);
             const volScalarField& pMean
                 = mesh().lookupObject<volScalarField>("pMean");
+            const volTensorField& RMean = mesh().lookupObject<volTensorField>
+            (
+                "turbulenceProperties:RMean"
+            );
+            volVectorField divRMean = fvc::div(RMean);
 
             volVectorField gradPMean = fvc::grad(pMean);
 
@@ -82,9 +87,23 @@ functions
                 fvc::laplacian(UMeanX)
             );
 
+            volScalarField divRMeanX
+            (
+                IOobject
+                (
+                    "divRMeanX",
+                    mesh().time().timeName(),
+                    mesh(),
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                divRMean.component(0)
+            );
+
             gradPMeanX.write();
             gradUMeanX.write();
             laplacianUMeanX.write();
+            divRMeanX.write();
         #};
     }
 }
