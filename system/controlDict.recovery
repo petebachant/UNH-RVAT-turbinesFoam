@@ -40,10 +40,11 @@ functions
             const volScalarField UMeanX = UMean.component(0);
             const volScalarField& pMean
                 = mesh().lookupObject<volScalarField>("pMean");
-            const volTensorField& RMean = mesh().lookupObject<volTensorField>
-            (
-                "turbulenceProperties:RMean"
-            );
+            const volSymmTensorField& RMean =
+                mesh().lookupObject<volSymmTensorField>
+                (
+                    "turbulenceProperties:RMean"
+                );
             volVectorField divRMean = fvc::div(RMean);
 
             volVectorField gradPMean = fvc::grad(pMean);

@@ -39,6 +39,7 @@ divSchemes
     div(phi,B)      Gauss limitedLinear 1;
     div(B)          Gauss linear;
     div((nuEff*dev2(T(grad(U))))) Gauss linear;
+    div(turbulenceProperties:RMean) Gauss linear;
 }
 
 laplacianSchemes
