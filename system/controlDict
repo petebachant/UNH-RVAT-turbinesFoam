@@ -53,6 +53,14 @@ libs
 
 functions
 {
+    turbulenceFields
+    {
+        type            turbulenceFields;
+        functionObjectLibs ("libutilityFunctionObjects.so");
+        enabled         true;
+        fields          (k R);
+    }
+
     fieldAverage
     {
         type            fieldAverage;
@@ -80,14 +88,14 @@ functions
                 base        time;
             }
 
-            nuSgs
+            turbulenceProperties:k
             {
                 mean        on;
                 prime2Mean  off;
                 base        time;
             }
 
-            k
+            turbulenceProperties:R
             {
                 mean        on;
                 prime2Mean  off;
