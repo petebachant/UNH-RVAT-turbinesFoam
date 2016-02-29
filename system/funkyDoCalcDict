@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2.4.x                                 |
+|  \\    /   O peration     | Version:  3.0.x                                 |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -52,7 +52,7 @@ planeAverageTurbTrans
     valueType surface;
     surfaceName testPlane;
     verbose true;
-    expression "1.0/UMean.x*nutMean*laplacianUMeanX";
+    expression "-1.0/UMean.x*divRMeanX";
     accumulations (weightedAverage);
 }
 
