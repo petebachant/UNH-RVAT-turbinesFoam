@@ -1,18 +1,17 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-Generate sampleDict for multiple cross-stream profiles
-"""
+"""Generate sampleDict for multiple cross-stream profiles."""
+
 from __future__ import division, print_function
 import numpy as np
 import os
 import sys
 import foampy
 
+
 # Input parameters
 setformat = "raw"
 interpscheme = "cellPoint"
-fields = ["UMean", "UPrime2Mean", "kMean"]
+fields = ["UMean", "UPrime2Mean", "turbulenceProperties:kMean"]
 x = 1.0
 ymax = 1.5
 ymin = -1.5
