@@ -180,7 +180,8 @@ def plot_al_perf(name="blade1", theta1=0, theta2=None, remove_offset=False,
         quantities = [quantities]
     df_turb = pd.read_csv("postProcessing/turbines/0/turbine.csv")
     df_turb = df_turb.drop_duplicates("time", keep="last")
-    df = pd.read_csv("postProcessing/actuatorLines/0/{}.csv".format(name))
+    df = pd.read_csv("postProcessing/actuatorLines/0/turbine.{}.csv"\
+                     .format(name))
     df = df.drop_duplicates("time", keep="last")
     df["angle_deg"] = df_turb.angle_deg
     df["cc"] = df.cl*np.sin(np.deg2rad(df.alpha_deg)) \
