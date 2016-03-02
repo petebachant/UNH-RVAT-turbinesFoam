@@ -81,7 +81,7 @@ def plot_meancontquiv(save=False, show=False,
 
 def plot_kcont(cb_orientation="vertical", newfig=True, save=False):
     """Plot contours of TKE."""
-    k = load_k_map()
+    k = load_k_map(amount="resolved")
     y_R = np.round(np.asarray(k.columns.values, dtype=float), decimals=4)
     z_H = np.asarray(k.index.values, dtype=float)
     if newfig:

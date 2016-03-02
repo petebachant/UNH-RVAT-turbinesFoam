@@ -144,8 +144,7 @@ def load_vel_map(component="u"):
 
 
 def load_k_profile(z_H=0.0):
-    """
-    Loads data from the sampled `UPrime2Mean` and `kMean` (if available) and
+    """Load data from the sampled `UPrime2Mean` and `kMean` (if available) and
     returns it as a pandas `DataFrame`.
     """
     z_H = float(z_H)
@@ -153,7 +152,7 @@ def load_k_profile(z_H=0.0):
     timedirs = os.listdir("postProcessing/sets")
     latest_time = max(timedirs)
     fname_u = "profile_{}_UPrime2Mean.xy".format(z_H)
-    fname_k = "profile_{}_kMean.xy".format(z_H)
+    fname_k = "profile_{}_turbulenceProperties:kMean.xy".format(z_H)
     data = np.loadtxt(os.path.join("postProcessing", "sets", latest_time,
                       fname_u), unpack=True)
     df["y_R"] = data[0]/R
@@ -170,8 +169,7 @@ def load_k_profile(z_H=0.0):
 
 
 def load_k_map(amount="total"):
-    """
-    Loads all TKE profiles. Returns a `DataFrame` with `z_H` as the index and
+    """Load all TKE profiles. Returns a `DataFrame` with `z_H` as the index and
     `y_R` as columns.
     """
     sets_dir = os.path.join("postProcessing", "sets")
