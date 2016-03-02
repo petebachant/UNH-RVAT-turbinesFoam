@@ -103,7 +103,7 @@ DebugSwitches
     actuatorLineElement 0;
     LeishmanBeddoes 0;
     LeishmanBeddoes3G $LeishmanBeddoes;
-    LeishmanBeddoes3 $LeishmanBeddoes;
+    LeishmanBeddoesSGC $LeishmanBeddoes;
 }
 
 // ************************************************************************* //
