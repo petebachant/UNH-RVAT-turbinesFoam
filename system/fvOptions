@@ -128,15 +128,21 @@ turbine
         {
             NACA0020
             {
-                Re      1.6e5;
-                data
-                (   // alpha C_l C_d
-                    #include "NACA0021_1.6e5"
-                );
+                tableType   singleRe;
+                Re          1.6e5;
+                data        (#include "NACA0021_1.6e5");
+                ReList      (4e4 8e4 1.6e5 3.6e5 7e5 1e6 2e6 5e6);
+                clData      (#include "NACA0021_multiRe_cl");
+                cdData      (#include "NACA0021_multiRe_cd");
+                cmData      (#include "NACA0021_multiRe_cm");
             }
             cylinder
             {
-                data ((-180 0 1.1)(180 0 1.1));
+                data
+                (
+                    (-180 0 1.1)
+                    (180 0 1.1)
+                );
             }
         }
     }
