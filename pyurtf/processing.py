@@ -230,7 +230,7 @@ def load_exp_recovery():
     exp_dir = os.path.join(os.path.expanduser("~"), "Google Drive", "Research",
                            "Experiments", "RVAT Re dep")
     os.chdir(exp_dir)
-    import py_rvat_re_dep.plotting as exppl
+    import pyrvatrd.plotting as exppl
     wm = exppl.WakeMap(1.0)
     dUdy = wm.dUdy
     dUdz = wm.dUdz

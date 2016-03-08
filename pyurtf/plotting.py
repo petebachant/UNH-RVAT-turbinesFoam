@@ -235,8 +235,7 @@ def plot_strut_perf(save=False, **kwargs):
 
 
 def make_recovery_bar_chart(ax=None, save=False):
-    """
-    Create a bar chart with x-labels for each recovery term and 5 different
+    """Create a bar chart with x-labels for each recovery term and 5 different
     bars per term, corresponding to each CFD case and the experimental data.
     """
     A_exp = 3.0*0.625
@@ -250,7 +249,7 @@ def make_recovery_bar_chart(ax=None, save=False):
         fig = None
     df.index = [labels[k] for k in df.index.values]
     df.plot(kind="bar", ax=ax, rot=0)
-    ax.hlines(0, -0.5, len(df) + 0.5, color="gray")
+    ax.hlines(0, -0.5, len(df) + 0.5, color="gray", lw=1)
     ax.set_ylabel(r"$\frac{U \, \mathrm{ transport} \times A_c}"
                   "{UU_\infty D^{-1}}$")
     if fig is not None:
