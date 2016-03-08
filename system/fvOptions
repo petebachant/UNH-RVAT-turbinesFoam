@@ -66,7 +66,7 @@ turbine
             blade1
             {
                 writePerf   true;
-                nElements   8;
+                nElements   12;
                 endEffects  on;
                 elementProfiles (NACA0020);
                 elementData
@@ -93,8 +93,11 @@ turbine
             strut1
             {
                 writePerf   true;
-                nElements   4;
-                elementProfiles (NACA0020 NACA0020 NACA0020 corner);
+                nElements   6;
+                elementProfiles
+                (
+                    NACA0020 NACA0020 NACA0020 NACA0020 NACA0020 corner
+                );
                 elementData
                 ( // axialDistance, radius, azimuth, chord, chordMount, pitch
                     (0.0 0.05 0.0 0.14 0.3 0.0)
@@ -116,7 +119,7 @@ turbine
 
         shaft
         {
-            nElements   8;
+            nElements   14;
             elementProfiles (cylinder);
             elementData
             ( // axialDistance, diameter
@@ -136,6 +139,10 @@ turbine
                 clData      (#include "NACA0021_multiRe_cl");
                 cdData      (#include "NACA0021_multiRe_cd");
                 cmData      (#include "NACA0021_multiRe_cm");
+                GaussianCoeffs
+                {
+                    meshFactor 1.0;
+                }
             }
             cylinder
             {
@@ -144,14 +151,22 @@ turbine
                     (-180 0 1.1)
                     (180 0 1.1)
                 );
+                GaussianCoeffs
+                {
+                    meshFactor 1.0;
+                }
             }
             corner
             {
                 data
                 (
-                    (-180 0 0.1)
-                    (180 0 0.1)
+                    (-180 0 0.05)
+                    (180 0 0.05)
                 );
+                GaussianCoeffs
+                {
+                    meshFactor 1.0;
+                }
             }
         }
     }
