@@ -31,7 +31,7 @@ turbine
         rotorRadius         0.5;
         freeStreamVelocity  (1 0 0);
         tipSpeedRatio       1.9;
-        tsrAmplitude        0.19;       // Amplitude for TSR oscillation
+        tsrAmplitude        0.0;        // Amplitude for TSR oscillation
         tsrPhase            1.9;        // Angle of first peak (rad)
         addedMass           on;
 
@@ -41,6 +41,7 @@ turbine
             dynamicStallModel   LeishmanBeddoesSGC;
             LeishmanBeddoesSGCCoeffs
             {
+                calcAlphaEquiv off;
                 Tp          1.7;        // Default = 1.7
                 Tf          3.0;        // Default = 3.0
                 TAlpha      6.25;
@@ -93,7 +94,17 @@ turbine
             {
                 writePerf   true;
                 nElements   8;
-                elementProfiles (NACA0020);
+                elementProfiles
+                (
+                    NACA0020
+                    NACA0020
+                    NACA0020
+                    NACA0020
+                    NACA0020
+                    NACA0020
+                    NACA0020
+                    corner
+                );
                 elementData
                 ( // axialDistance, radius, azimuth, chord, chordMount, pitch
                     (0.0 0.05 0.0 0.14 0.3 0.0)
@@ -128,7 +139,7 @@ turbine
         {
             NACA0020
             {
-                tableType   singleRe;
+                tableType   multiRe; // singleRe || multiRe
                 Re          1.6e5;
                 data        (#include "NACA0021_1.6e5");
                 ReList      (4e4 8e4 1.6e5 3.6e5 7e5 1e6 2e6 5e6);
@@ -142,6 +153,14 @@ turbine
                 (
                     (-180 0 1.1)
                     (180 0 1.1)
+                );
+            }
+            corner
+            {
+                data
+                (
+                    (-180 0 0.1)
+                    (180 0 0.1)
                 );
             }
         }
