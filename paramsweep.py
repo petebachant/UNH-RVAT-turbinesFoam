@@ -152,10 +152,10 @@ if __name__ == "__main__":
     parser.add_argument("start", default=0.4, type=float, nargs="?")
     parser.add_argument("stop", default=3.5, type=float, nargs="?")
     parser.add_argument("step", default=0.5, type=float, nargs="?")
-    parser.add_argument("--parallel", default=True, type=bool)
+    parser.add_argument("--serial", default=False, action="store_true")
     parser.add_argument("--append", "-a", default=False, action="store_true")
 
     args = parser.parse_args()
 
     param_sweep(args.parameter, args.start, args.stop, args.step,
-                append=args.append, parallel=args.parallel)
+                append=args.append, parallel=not args.serial)
