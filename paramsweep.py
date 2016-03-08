@@ -136,7 +136,7 @@ def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
     # Set parameters back to defaults
     if param == "tsr":
         set_tsr(1.9)
-        set_tsr_fluc(0.19)
+        set_tsr_fluc(0.0)
     elif param == "nx":
         set_blockmesh_resolution()
     elif param == "dt":
