@@ -226,7 +226,7 @@ def read_funky_log():
 
 def load_exp_recovery():
     """Load recovery terms from experimental data. Must be run with IPython."""
-    start_dir = os.getcwd()
+    start_dir = os.path.split(os.path.split(__file__)[0])[0]
     exp_dir = os.path.join(os.path.expanduser("~"), "Google Drive", "Research",
                            "Experiments", "RVAT Re dep")
     os.chdir(exp_dir)
