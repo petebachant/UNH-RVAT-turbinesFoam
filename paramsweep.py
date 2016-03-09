@@ -80,7 +80,7 @@ def set_dt(dt=0.005, tsr=None, tsr_0=1.9):
     """
     if tsr is not None:
         dt = dt*tsr_0/tsr
-        print("Setting deltaT = dt*tsr/tsr_0 = {:.3f}".format(dt))
+        print("Setting deltaT = dt*tsr_0/tsr = {:.3f}".format(dt))
     dt = str(dt)
     foampy.dictionaries.replace_value("system/controlDict", "deltaT", dt)
 
