@@ -305,13 +305,15 @@ def plot_verification(save=False):
     if os.path.isfile(dt_fpath):
         df_dt = pd.read_csv(dt_fpath)
         df_dt["steps_per_rev"] = 1.0/(df_dt.tsr/R*U/(2.0*np.pi))/df_dt.dt
-        ax[0].plot(df_dt.steps_per_rev, df_dt.cp, "o")
+        df_dt = df_dt.sort_values(by="steps_per_rev")
+        ax[0].plot(df_dt.steps_per_rev, df_dt.cp, marker="o")
         ax[0].set_xlabel("Time steps per rev.")
         ax[0].set_ylabel(r"$C_P$")
         # ax[0].set_ylim(ylim)
     if os.path.isfile(nx_fpath):
         df_nx = pd.read_csv(nx_fpath)
-        ax[1].plot(df_nx.nx, df_nx.cp, "o")
+        df_nx = df_nx.sort_values(by="nx")
+        ax[1].plot(df_nx.nx, df_nx.cp, marker="o")
         ax[1].set_xlabel(r"$N_x$")
         ax[1].set_ylabel(r"$C_P$")
         # ax[1].set_ylim(ylim)
