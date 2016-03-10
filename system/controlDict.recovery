@@ -45,8 +45,11 @@ functions
                 (
                     "turbulenceProperties:RMean"
                 );
-            volVectorField divRMean = fvc::div(RMean);
+            const volSymmTensorField& UPrime2Mean
+                = mesh().lookupObject<volSymmTensorField>("UPrime2Mean");
 
+            volVectorField divRMean = fvc::div(RMean);
+            volVectorField divUPrime2Mean = fvc::div(UPrime2Mean);
             volVectorField gradPMean = fvc::grad(pMean);
 
             volScalarField gradPMeanX
@@ -101,10 +104,24 @@ functions
                 divRMean.component(0)
             );
 
+            volScalarField divUPrime2MeanX
+            (
+                IOobject
+                (
+                    "divUPrime2MeanX",
+                    mesh().time().timeName(),
+                    mesh(),
+                    IOobject::NO_READ,
+                    IOobject::AUTO_WRITE
+                ),
+                divUPrime2Mean.component(0)
+            );
+
             gradPMeanX.write();
             gradUMeanX.write();
             laplacianUMeanX.write();
             divRMeanX.write();
+            divUPrime2MeanX.write();
         #};
     }
 }

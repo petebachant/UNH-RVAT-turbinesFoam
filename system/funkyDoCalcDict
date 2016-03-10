@@ -52,7 +52,7 @@ planeAverageTurbTrans
     valueType surface;
     surfaceName testPlane;
     verbose true;
-    expression "-1.0/UMean.x*divRMeanX";
+    expression "-1.0/UMean.x*(divRMeanX)";
     accumulations (weightedAverage);
 }
 
