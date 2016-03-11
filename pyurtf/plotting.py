@@ -298,7 +298,7 @@ def plot_wake_profiles(z_H=1e-5, exp=False, save=False):
 
 def plot_verification(save=False):
     """Plot spatial and temporal grid dependence."""
-    fig, ax = plt.subplots(figsize=(7.5, 3.5), ncols=2)
+    fig, ax = plt.subplots(figsize=(7.5, 3), ncols=2)
     dt_fpath = "processed/dt_sweep.csv"
     nx_fpath = "processed/nx_sweep.csv"
     ylim = (0.15, 0.5)
