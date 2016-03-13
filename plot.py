@@ -32,6 +32,10 @@ if __name__ == "__main__":
                         default=["alpha", "rel_vel_mag"])
     args = parser.parse_args()
 
+    if args.save:
+        if not os.path.isdir("figures"):
+            os.mkdir("figures")
+
     if "wake" in args.plot or args.all:
         plot_meancontquiv(save=args.save)
         plot_kcont(save=args.save)
