@@ -241,22 +241,21 @@ def make_recovery_bar_chart(ax=None, save=False):
     """Create a bar chart with x-labels for each recovery term and 5 different
     bars per term, corresponding to each CFD case and the experimental data.
     """
-    A_exp = 3.0*0.625
     df = pd.DataFrame(index=["y_adv", "z_adv", "turb_trans", "pressure_trans",
                              "visc_trans"])
-    df["ALM"] = pd.Series(read_funky_log(), name="ALM")*A_c
+    df["ALM"] = pd.Series(read_funky_log(), name="ALM")
     # Results from blade-resolved CFD, added manually
     df["Blade-resolved SST"] = pd.Series({"pressure_trans": -0.02528183721,
                                           "turb_trans": 0.02868203482,
                                           "visc_trans": 1.031373523e-06,
                                           "y_adv": -0.001940439635,
-                                          "z_adv": 0.009998671966})*A_c
+                                          "z_adv": 0.009998671966})
     df["Blade-resolved SA"] = pd.Series({"pressure_trans": -0.0048568805,
                                          "turb_trans": 0.00515128319,
                                          "visc_trans": 1.073326703e-06,
                                          "y_adv": -0.006335581968,
-                                         "z_adv": 0.004210650781})*A_c
-    df["Exp."] = pd.Series(load_exp_recovery(), name="Exp.")*A_exp
+                                         "z_adv": 0.004210650781})
+    df["Exp."] = pd.Series(load_exp_recovery(), name="Exp.")
     if ax is None:
         fig, ax = plt.subplots(figsize=(7, 3.5))
     else:
