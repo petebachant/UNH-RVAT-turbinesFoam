@@ -23,6 +23,13 @@ delta           cubeRootVol;
 
 printCoeffs     on;
 
+SmagorinskyCoeffs
+{
+    // Cs = sqrt(Ck*sqrt(Ck/Ce))
+    Ck          0.094; // Default = 0.094
+    Ce          1.048; // Default = 1.048
+}
+
 cubeRootVolCoeffs
 {
     deltaCoeff      1;
