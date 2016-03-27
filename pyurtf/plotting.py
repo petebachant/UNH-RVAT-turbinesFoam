@@ -109,20 +109,16 @@ def plot_kcont(cb_orientation="vertical", newfig=True, save=False):
         plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
-def plot_turb_lines(half=False, color="gray"):
-    if half:
-        plt.hlines(0.5, -1, 1, linestyles="solid", linewidth=2)
-        plt.vlines(-1, 0, 0.5, linestyles="solid", linewidth=2)
-        plt.vlines(1, 0, 0.5, linestyles="solid", linewidth=2)
-    else:
-        plt.hlines(0.5, -1, 1, linestyles="solid", colors=color,
-                   linewidth=3)
-        plt.hlines(-0.5, -1, 1, linestyles="solid", colors=color,
-                   linewidth=3)
-        plt.vlines(-1, -0.5, 0.5, linestyles="solid", colors=color,
-                   linewidth=3)
-        plt.vlines(1, -0.5, 0.5, linestyles="solid", colors=color,
-                   linewidth=3)
+def plot_turb_lines(color="gray"):
+    """Plot turbine frontal area outline."""
+    plt.hlines(0.5, -1, 1, linestyles="solid", colors=color,
+               linewidth=2)
+    plt.hlines(-0.5, -1, 1, linestyles="solid", colors=color,
+               linewidth=2)
+    plt.vlines(-1, -0.5, 0.5, linestyles="solid", colors=color,
+               linewidth=2)
+    plt.vlines(1, -0.5, 0.5, linestyles="solid", colors=color,
+               linewidth=2)
 
 
 def plot_cp(ax=None, angle0=540.0, save=False):
