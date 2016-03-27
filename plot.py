@@ -26,8 +26,8 @@ if __name__ == "__main__":
                         default=False, action="store_true")
     parser.add_argument("--save", "-s", help="Save to `figures` directory",
                         default=False, action="store_true")
-    parser.add_argument("--noshow", help="Do not call matplotlib show function",
-                        default=False, action="store_true")
+    parser.add_argument("--no-show", default=False, action="store_true",
+                        help="Do not call matplotlib show function")
     parser.add_argument("-q", help="Quantities to plot", nargs="*",
                         default=["alpha", "rel_vel_mag"])
     args = parser.parse_args()
@@ -58,5 +58,5 @@ if __name__ == "__main__":
     if "verification" in args.plot or args.all:
         plot_verification(save=args.save)
 
-    if not args.noshow:
+    if not args.no_show:
         plt.show()
