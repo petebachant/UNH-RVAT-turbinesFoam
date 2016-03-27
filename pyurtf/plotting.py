@@ -38,7 +38,7 @@ def plot_meancontquiv(save=False, show=False,
     mean_w = load_vel_map("w")
     y_R = np.round(np.asarray(mean_u.columns.values, dtype=float), decimals=4)
     z_H = np.asarray(mean_u.index.values, dtype=float)
-    plt.figure(figsize=(7.5, 4.5))
+    plt.figure(figsize=(7.5, 4.8))
     # Add contours of mean velocity
     cs = plt.contourf(y_R, z_H, mean_u,
                       np.arange(0.15, 1.25, 0.05), cmap=plt.cm.coolwarm)
@@ -85,7 +85,7 @@ def plot_kcont(cb_orientation="vertical", newfig=True, save=False):
     y_R = np.round(np.asarray(k.columns.values, dtype=float), decimals=4)
     z_H = np.asarray(k.index.values, dtype=float)
     if newfig:
-        plt.figure(figsize=(7.5, 1.9))
+        plt.figure(figsize=(7.5, 2.0))
     cs = plt.contourf(y_R, z_H, k, 20, cmap=plt.cm.coolwarm,
                       levels=np.linspace(0, 0.09, num=19))
     plt.xlabel(r"$y/R$")
@@ -101,7 +101,7 @@ def plot_kcont(cb_orientation="vertical", newfig=True, save=False):
     plt.ylim((0, 0.63))
     ax = plt.axes()
     ax.set_aspect(2)
-    plt.yticks([0,0.13,0.25,0.38,0.5,0.63])
+    plt.yticks([0, 0.13, 0.25, 0.38, 0.5, 0.63])
     plt.tight_layout()
     if save:
         figname = "kcont"
