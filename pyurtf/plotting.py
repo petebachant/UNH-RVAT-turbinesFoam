@@ -233,7 +233,7 @@ def plot_strut_perf(save=False, **kwargs):
         plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
-def make_recovery_bar_chart(ax=None, actuator_disk=False, save=False):
+def make_recovery_bar_chart(ax=None, actuator_disk=True, save=False):
     """Create a bar chart with x-labels for each recovery term and 5 different
     bars per term, corresponding to each CFD case and the experimental data.
     Viscous transport terms are all multiplied by 1000.
