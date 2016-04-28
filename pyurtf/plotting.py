@@ -8,7 +8,7 @@ labels = {"y_adv": r"$-V \frac{\partial U}{\partial y}$",
           "z_adv": r"$-W \frac{\partial U}{\partial z}$",
           "turb_trans": r"Turb. trans.",
           "pressure_trans": r"$-\frac{\partial P}{\partial x}$",
-          "visc_trans": r"Visc. trans.",
+          "visc_trans": r"Visc. trans. ($\times 10^3$)",
           "rel_vel_mag": "Relative velocity (m/s)",
           "cc": "$C_c$",
           "cm": "$C_m$",
@@ -236,6 +236,7 @@ def plot_strut_perf(save=False, **kwargs):
 def make_recovery_bar_chart(ax=None, actuator_disk=False, save=False):
     """Create a bar chart with x-labels for each recovery term and 5 different
     bars per term, corresponding to each CFD case and the experimental data.
+    Viscous transport terms are all multiplied by 1000.
     """
     A_exp = 3.0*0.625
     df = pd.DataFrame(index=["y_adv", "z_adv", "turb_trans", "pressure_trans",
@@ -244,22 +245,24 @@ def make_recovery_bar_chart(ax=None, actuator_disk=False, save=False):
         # Results from actuator disk, added manually
         df["AD"] = pd.Series({"pressure_trans": 0.0041476449161,
                               "turb_trans": 0.00027825541768,
-                              "visc_trans": 8.68133149038e-07,
+                              "visc_trans": 8.68133149038e-07 * 1e3,
                               "y_adv": -0.00277401625087,
                               "z_adv": -0.00166402401936})*A_c
     df["ALM"] = pd.Series(read_funky_log(), name="ALM")*A_c
+    df["ALM"]["visc_trans"] *= 1e3
     # Results from blade-resolved CFD, added manually
     df["Blade-resolved SST"] = pd.Series({"pressure_trans": -0.02528183721,
                                           "turb_trans": 0.02868203482,
-                                          "visc_trans": 1.031373523e-06,
+                                          "visc_trans": 1.031373523e-06 * 1e3,
                                           "y_adv": -0.001940439635,
                                           "z_adv": 0.009998671966})*A_c
     df["Blade-resolved SA"] = pd.Series({"pressure_trans": -0.0048568805,
                                          "turb_trans": 0.00515128319,
-                                         "visc_trans": 1.073326703e-06,
+                                         "visc_trans": 1.073326703e-06 * 1e3,
                                          "y_adv": -0.006335581968,
                                          "z_adv": 0.004210650781})*A_c
     df["Exp."] = pd.Series(load_exp_recovery(), name="Exp.")*A_exp
+    df["Exp."]["visc_trans"] *= 1e3
     if ax is None:
         fig, ax = plt.subplots(figsize=(7, 3.5))
     else:
