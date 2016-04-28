@@ -233,13 +233,20 @@ def plot_strut_perf(save=False, **kwargs):
         plt.savefig("figures/" + figname + ".png", dpi=300)
 
 
-def make_recovery_bar_chart(ax=None, save=False):
+def make_recovery_bar_chart(ax=None, actuator_disk=False, save=False):
     """Create a bar chart with x-labels for each recovery term and 5 different
     bars per term, corresponding to each CFD case and the experimental data.
     """
     A_exp = 3.0*0.625
     df = pd.DataFrame(index=["y_adv", "z_adv", "turb_trans", "pressure_trans",
                              "visc_trans"])
+    if actuator_disk:
+        # Results from actuator disk, added manually
+        df["AD"] = pd.Series({"pressure_trans": 0.0041476449161,
+                              "turb_trans": 0.00027825541768,
+                              "visc_trans": 8.68133149038e-07,
+                              "y_adv": -0.00277401625087,
+                              "z_adv": -0.00166402401936})*A_c
     df["ALM"] = pd.Series(read_funky_log(), name="ALM")*A_c
     # Results from blade-resolved CFD, added manually
     df["Blade-resolved SST"] = pd.Series({"pressure_trans": -0.02528183721,
