@@ -227,6 +227,8 @@ def load_exp_recovery():
     start_dir = os.getcwd()
     exp_dir = os.path.join(os.path.expanduser("~"), "Google Drive", "Research",
                            "Experiments", "RVAT Re dep")
+    if not exp_dir in sys.path:
+        sys.path.append(exp_dir)
     os.chdir(exp_dir)
     import pyrvatrd.plotting as exppl
     wm = exppl.WakeMap(1.0)
