@@ -1,6 +1,8 @@
 UNH-RVAT turbinesFoam case files
 ================================
 
+[![DOI](https://zenodo.org/badge/4234/petebachant/UNH-RVAT-turbinesFoam.svg)](https://zenodo.org/badge/latestdoi/4234/petebachant/UNH-RVAT-turbinesFoam)
+
 These case files simulate the UNH-RVAT using OpenFOAM's
 `pimpleFoam` solver and the
 [turbinesFoam](https://github.com/turbinesFoam/turbinesFoam)  actuator line
