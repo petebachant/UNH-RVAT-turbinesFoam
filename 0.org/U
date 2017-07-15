@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2.4.x                                 |
+|  \\    /   O peration     | Version:  4.1                                   |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -35,7 +35,7 @@ boundaryField
     walls
     {
         type        fixedValue;
-        value       uniform (1 0 0);
+        value       uniform $flowVelocity;
     }
 
     top
@@ -46,12 +46,12 @@ boundaryField
     bottom
     {
         type        fixedValue;
-        value       uniform (1 0 0);
+        value       uniform $flowVelocity;
     }
 
     "proc.*"
     {
-        type            processor;
+        type        processor;
     }
 }
 
