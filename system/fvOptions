@@ -67,7 +67,7 @@ turbine
             {
                 writePerf   true;
                 nElements   8;
-                endEffects  on;
+                endEffects  off;
                 elementProfiles (NACA0020);
                 elementData
                 ( // axialDistance, radius, azimuth, chord, chordMount, pitch
@@ -131,6 +131,7 @@ turbine
             {
                 tableType   multiRe; // singleRe || multiRe
                 Re          1.6e5;
+                ReScale     3; // Scales up Re used for lookup
                 data        (#include "NACA0021_1.6e5");
                 ReList      (4e4 8e4 1.6e5 3.6e5 7e5 1e6 2e6 5e6);
                 clData      (#include "NACA0021_multiRe_cl");
