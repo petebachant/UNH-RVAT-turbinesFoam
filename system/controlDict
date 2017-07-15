@@ -59,7 +59,7 @@ functions
         functionObjectLibs ("libfieldFunctionObjects.so");
         enabled         true;
         timeStart       3.0;
-        outputControl   outputTime;
+        writeControl    outputTime;
         resetOnRestart  true;
         resetOnOutput   false;
 
