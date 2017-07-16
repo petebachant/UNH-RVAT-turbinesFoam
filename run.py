@@ -10,7 +10,6 @@ import pandas as pd
 import glob
 import foampy
 from foampy.dictionaries import replace_value
-import numpy as np
 import shutil
 from pyurtf import processing as pr
 
