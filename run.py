@@ -139,7 +139,7 @@ def post_process(parallel=False, tee=False, overwrite=True):
 
 def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
                 append=False, parallel=True, tee=False, **kwargs):
-    """Run multiple simulations, varying ``quantity``.
+    """Run multiple simulations, varying ``param``.
 
     ``step`` is not included.
     """
