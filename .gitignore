@@ -10,3 +10,7 @@ system/sampleDict
 figures
 dynamicCode
 processor*
+system/blockMeshDict
+system/controlDict
+system/sets
+system/turbineOperatingParams

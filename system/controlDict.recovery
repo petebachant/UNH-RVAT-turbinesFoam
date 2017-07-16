@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2.4.x                                 |
+|  \\    /   O peration     | Version:  4.1                                   |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -33,16 +33,16 @@ functions
         type coded;
         // Name of on-the-fly generated functionObject
         redirectType writeRecoveryTerms;
-        code
+        codeEnd
         #{
             const volVectorField& UMean
                 = mesh().lookupObject<volVectorField>("UMean");
             const volScalarField UMeanX = UMean.component(0);
             const volScalarField& pMean
                 = mesh().lookupObject<volScalarField>("pMean");
-            
+
             volVectorField gradPMean = fvc::grad(pMean);
-            
+
             volScalarField gradPMeanX
             (
                 IOobject
@@ -55,7 +55,7 @@ functions
                 ),
                 gradPMean.component(0)
             );
-            
+
             volVectorField gradUMeanX
             (
                 IOobject

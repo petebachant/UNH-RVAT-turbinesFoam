@@ -1,17 +1,17 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  3.0.x                                 |
+|  \\    /   O peration     | Version:  4.1                                   |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
-{
+{{
     version     2.0;
     format      ascii;
     class       dictionary;
     object      controlDict;
-}
+}}
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 application     pimpleFoam;
@@ -24,7 +24,7 @@ stopAt          endTime;
 
 endTime         6;
 
-deltaT          0.005;
+deltaT          {dt};
 
 writeControl    runTime;
 
@@ -52,9 +52,9 @@ libs
 );
 
 functions
-{
+{{
     fieldAverage
-    {
+    {{
         type            fieldAverage;
         functionObjectLibs ("libfieldFunctionObjects.so");
         enabled         true;
@@ -66,44 +66,44 @@ functions
         fields
         (
             U
-            {
+            {{
                 mean        on;
                 prime2Mean  on;
                 base        time;
-            }
+            }}
 
             p
-            {
+            {{
                 mean        on;
                 prime2Mean  off;
                 base        time;
-            }
+            }}
 
             nut
-            {
+            {{
                 mean        on;
                 prime2Mean  off;
                 base        time;
-            }
+            }}
 
             k
-            {
+            {{
                 mean        on;
                 prime2Mean  off;
                 base        time;
-            }
+            }}
         );
-    }
-}
+    }}
+}}
 
 DebugSwitches
-{
+{{
     crossFlowTurbineALSource 0;
     actuatorLineSource 0;
     actuatorLineElement 0;
     LeishmanBeddoes 0;
     LeishmanBeddoes3G $LeishmanBeddoes;
     LeishmanBeddoes3 $LeishmanBeddoes;
-}
+}}
 
 // ************************************************************************* //
