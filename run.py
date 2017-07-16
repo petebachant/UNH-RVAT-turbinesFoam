@@ -224,7 +224,7 @@ if __name__ == "__main__":
                         help="Run multiple simulations varying a parameter",
                         choices=["tsr", "nx", "dt", "talpha"])
     parser.add_argument("--start", default=0.4, type=float)
-    parser.add_argument("--stop", default=3.5, type=float)
+    parser.add_argument("--stop", default=3.1, type=float)
     parser.add_argument("--step", default=0.5, type=float)
     parser.add_argument("--serial", "-S", default=False, action="store_true")
     parser.add_argument("--append", "-a", default=False, action="store_true")
