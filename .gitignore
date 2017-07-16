@@ -4,7 +4,7 @@ constant/polyMesh
 *.OpenFOAM
 log.*
 *.pyc
-!0.org
+!0.orig
 system/sampleDict
 *.pvsm
 figures
@@ -14,3 +14,7 @@ system/blockMeshDict
 system/controlDict
 system/sets
 system/turbineOperatingParams
+constant/turbulenceProperties
+system/snappyHexMeshDict
+system/decomposeParDict
+system/fvOptions

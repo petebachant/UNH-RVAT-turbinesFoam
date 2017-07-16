@@ -1,26 +1,29 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  3.0.x                                 |
+|  \\    /   O peration     | Version:  4.1                                   |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
-{
+{{
     version     2.0;
     format      ascii;
     class       dictionary;
-    location    "constant";
-    object      turbulenceProperties;
-}
+    object      decomposeParDict;
+}}
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-simulationType  RAS;
+numberOfSubdomains {nproc};
 
-RAS
-{
-    #include "RASProperties"
-}
+method          hierarchical;
 
+hierarchicalCoeffs
+{{
+    n               ({nx} {ny} {nz});
+    delta           0.001;
+    order           xyz;
+}}
 
 // ************************************************************************* //

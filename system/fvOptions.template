@@ -6,39 +6,41 @@
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
-{
+{{
     version     2.0;
     format      ascii;
     class       dictionary;
     location    "system";
     object      fvOptions;
-}
+}}
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 
 turbine
-{
+{{
     type            crossFlowTurbineALSource;
     active          on;
 
     crossFlowTurbineALSourceCoeffs
-    {
+    {{
         fieldNames          (U);
         selectionMode       cellSet;
         cellSet             turbine;
         origin              (0 0 0);
-        axis                (0 0 1);    // Negative for opposite rotation
+        axis                (0 0 1); // Negative for opposite rotation
         rotorRadius         0.5;
         freeStreamVelocity  (1 0 0);
-        #include "turbineOperatingParams";
+        tipSpeedRatio       {tsr};
+        tsrAmplitude        {tsr_amp};   // Amplitude for TSR oscillation
+        tsrPhase            {tsr_phase}; // Angle of first peak (rad)
         addedMass           on;
 
         dynamicStall
-        {
+        {{
             active              on;
             dynamicStallModel   LeishmanBeddoesSGC;
             LeishmanBeddoesSGCCoeffs
-            {
+            {{
                 calcAlphaEquiv off;
                 Tp          1.7;        // Default = 1.7
                 Tf          3.0;        // Default = 3.0
@@ -50,21 +52,21 @@ turbine
                 B1          0.5;
                 eta         0.98;
                 E0          0.16;
-            }
-        }
+            }}
+        }}
 
         flowCurvature
-        {
+        {{
             active              on;
             flowCurvatureModel  Goude; // Goude || MandalBurton
-        }
+        }}
 
         blades
-        {
+        {{
             blade1
-            {
+            {{
                 writePerf   true;
-                nElements   8;
+                nElements   {n_blade_elements};
                 endEffects  off;
                 elementProfiles (NACA0020);
                 elementData
@@ -72,61 +74,61 @@ turbine
                     (-0.5 0.5 0.0 0.14 0.5 0.0)
                     ( 0.5 0.5 0.0 0.14 0.5 0.0)
                 );
-            }
+            }}
             blade2
-            {
+            {{
                 $blade1;
                 writePerf   false;
                 azimuthalOffset 120.0;
-            }
+            }}
             blade3
-            {
+            {{
                 $blade2;
                 azimuthalOffset 240.0;
-            }
-        }
+            }}
+        }}
 
         struts
-        {
+        {{
             strut1
-            {
+            {{
                 writePerf   true;
-                nElements   4;
-                elementProfiles (NACA0020 NACA0020 NACA0020 corner);
+                nElements   {n_strut_elements};
+                elementProfiles ({strut_profiles});
                 elementData
                 ( // axialDistance, radius, azimuth, chord, chordMount, pitch
                     (0.0 0.05 0.0 0.14 0.3 0.0)
                     (0.0 0.5 0.0 0.14 0.3 0.0)
                 );
-            }
+            }}
             strut2
-            {
+            {{
                 $strut1;
                 writePerf   false;
                 azimuthalOffset 120.0;
-            }
+            }}
             strut3
-            {
+            {{
                 $strut2;
                 azimuthalOffset 240.0;
-            }
-        }
+            }}
+        }}
 
         shaft
-        {
-            nElements   8;
+        {{
+            nElements   {n_shaft_elements};
             elementProfiles (cylinder);
             elementData
             ( // axialDistance, diameter
                 (-0.66 0.09)
                 ( 0.66 0.09)
             );
-        }
+        }}
 
         profileData
-        {
+        {{
             NACA0020
-            {
+            {{
                 tableType   multiRe; // singleRe || multiRe
                 Re          1.6e5;
                 ReScale     3; // Scales up Re used for lookup
@@ -135,25 +137,25 @@ turbine
                 clData      (#include "NACA0021_multiRe_cl");
                 cdData      (#include "NACA0021_multiRe_cd");
                 cmData      (#include "NACA0021_multiRe_cm");
-            }
+            }}
             cylinder
-            {
+            {{
                 data
                 (
                     (-180 0 1.1)
                     (180 0 1.1)
                 );
-            }
+            }}
             corner
-            {
+            {{
                 data
                 (
                     (-180 0 0.05)
                     (180 0 0.05)
                 );
-            }
-        }
-    }
-}
+            }}
+        }}
+    }}
+}}
 
 // ************************************************************************* //

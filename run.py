@@ -59,7 +59,7 @@ def set_blockmesh_resolution(nx=48, ny=None, nz=None):
     foampy.fill_template("system/blockMeshDict.template", nx=nx, ny=ny, nz=nz)
 
 
-def set_dt(dt=0.005, tsr=None, tsr_0=1.9):
+def set_dt(dt=0.005, tsr=None, tsr_0=1.9, les=False):
     """Set ``deltaT`` in ``controlDict``. Will scale proportionally if ``tsr``
     and ``tsr_0`` are supplied, such that steps-per-rev is consistent with
     ``tsr_0``.
@@ -68,7 +68,12 @@ def set_dt(dt=0.005, tsr=None, tsr_0=1.9):
         dt = dt*tsr_0/tsr
         print("Setting deltaT = dt*tsr_0/tsr = {:.3f}".format(dt))
     dt = str(dt)
-    foampy.fill_template("system/controlDict.template", dt=dt)
+    if les:
+        write_interval = 0.01
+    else:
+        write_interval = 0.05
+    foampy.fill_template("system/controlDict.template", dt=dt,
+                         write_interval=write_interval)
 
 
 def set_talpha(val=6.25):
@@ -166,26 +171,50 @@ def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
         set_talpha()
 
 
-def set_turbine_op_params(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4):
+def set_turbine_params(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4, les=False):
     """Write file defining turbine operating parameters.
 
     ``tsr_phase`` is in radians.
     """
-    txt="""
-tipSpeedRatio   {tsr};
-tsrAmplitude    {tsr_amp};
-tsrPhase        {tsr_phase};
-    """.format(tsr=tsr, tsr_amp=tsr_amp, tsr_phase=tsr_phase)
-    with open("system/turbineOperatingParams", "w") as f:
-        f.write(txt)
+    params = {"tsr": tsr, "tsr_amp": tsr_amp, "tsr_phase": tsr_phase}
+    if not les:
+        params["n_blade_elements"] = 8
+        params["n_strut_elements"] = 4
+        params["n_shaft_elements"] = 8
+    else:
+        params["n_blade_elements"] = 16
+        params["n_strut_elements"] = 8
+        params["n_shaft_elements"] = 21
+    params["strut_profiles"] = " ".join(
+        ["NACA0020"] * (params["n_strut_elements"] - 1)
+    ) + " corner"
+    foampy.fill_template("system/fvOptions.template", **params)
 
 
 def run(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4, nx=48, mesh=True, parallel=False,
-        dt=0.005, tee=False, reconstruct=True, overwrite=False, post=True):
+        dt=0.005, tee=False, reconstruct=True, overwrite=False, post=True,
+        les=False, nx_les=59, dt_les=0.002, tsr_amp_les=0.19):
     """Run simulation once."""
+    if les:
+        nx = nx_les
+        dt = dt_les
+        tsr_amp = tsr_amp_les
+        foampy.fill_template("constant/turbulenceProperties.template",
+                             turbulence="LES")
+        subprocess.call("cp system/snappyHexMeshDict.LES "
+                        "system/snappyHexMeshDict", shell=True)
+        foampy.fill_template("system/decomposeParDict.template",
+                             nproc=4, nx=1, ny=2, nz=2)
+    else:
+        foampy.fill_template("constant/turbulenceProperties.template",
+                             turbulence="RAS")
+        subprocess.call("cp system/snappyHexMeshDict.RAS "
+                        "system/snappyHexMeshDict", shell=True)
+        foampy.fill_template("system/decomposeParDict.template",
+                             nproc=2, nx=1, ny=1, nz=2)
     print("Setting TSR to", tsr)
-    set_turbine_op_params(tsr=tsr, tsr_amp=tsr_amp, tsr_phase=tsr_phase)
-    set_dt(dt=dt, tsr=tsr)
+    set_turbine_params(tsr=tsr, tsr_amp=tsr_amp, tsr_phase=tsr_phase, les=les)
+    set_dt(dt=dt, tsr=tsr, les=les)
     if mesh:
         # Create blockMeshDict
         set_blockmesh_resolution(nx=nx)
@@ -215,6 +244,14 @@ if __name__ == "__main__":
     parser.add_argument("--nx", "-x", default=48, type=int, help="Number of "
                         "cells in the x-direction for the base mesh")
     parser.add_argument("--dt", default=0.005, type=float, help="Time step")
+    parser.add_argument("--les", "-L", default=False, action="store_true",
+                        help="Run LES instead of RANS")
+    parser.add_argument("--nx-les", default=59, type=int, help="Number of "
+                        "base mesh cells in the x-direction to use with LES")
+    parser.add_argument("--dt-les", default=0.002, type=float, help="Time step "
+                        "to use with LES")
+    parser.add_argument("--tsr-amp-les", default=0.19, type=float,
+                        help="TSR amplitude to use with LES")
     parser.add_argument("--leave-mesh", "-l", default=False,
                         action="store_true", help="Leave existing mesh")
     parser.add_argument("--post", "-P", default=False, action="store_true",
@@ -230,14 +267,23 @@ if __name__ == "__main__":
     parser.add_argument("--append", "-a", default=False, action="store_true")
     parser.add_argument("--tee", "-T", default=False, action="store_true",
                         help="Print log files to terminal while running")
+    parser.add_argument("--overwrite", "-f", default=False, action="store_true",
+                        help="Clean case automatically before running")
     args = parser.parse_args()
+
+    if args.overwrite:
+        foampy.clean(remove_zero=True)
 
     if args.param_sweep:
         param_sweep(args.param_sweep, args.start, args.stop, args.step,
                     append=args.append, parallel=not args.serial,
-                    tee=args.tee, nx=args.nx, dt=args.dt, tsr=args.tsr)
+                    tee=args.tee, nx=args.nx, dt=args.dt, tsr=args.tsr,
+                    les=args.les, nx_les=args.nx_les, dt_les=args.dt_les,
+                    tsr_amp_les=0.0)
     elif not args.post:
         run(tsr=args.tsr, nx=args.nx, dt=args.dt, parallel=not args.serial,
-            tee=args.tee, mesh=not args.leave_mesh, overwrite=args.leave_mesh)
+            tee=args.tee, mesh=not args.leave_mesh, overwrite=args.leave_mesh,
+            les=args.les, nx_les=args.nx_les, dt_les=args.dt_les,
+            tsr_amp_les=args.tsr_amp_les)
     if args.post:
         post_process()
