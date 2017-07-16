@@ -160,6 +160,7 @@ def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
             post=False, **kwargs)
         os.rename("log.pimpleFoam", "log.pimpleFoam." + str(p))
         log_perf(param=param, append=True)
+        foampy.clean(leave_mesh=True, remove_zero=True)
     # Set parameters back to defaults
     if param == "talpha":
         set_talpha()
