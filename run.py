@@ -235,7 +235,7 @@ def run(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4, nx=48, mesh=True, parallel=False,
     if parallel and reconstruct:
         foampy.run("reconstructPar", tee=tee, overwrite=overwrite)
     if post:
-        post_process(overwrite=overwrite, parallel=parallel and not reconstruct)
+        post_process(overwrite=overwrite, parallel=parallel)
 
 
 if __name__ == "__main__":
@@ -286,4 +286,4 @@ if __name__ == "__main__":
             les=args.les, nx_les=args.nx_les, dt_les=args.dt_les,
             tsr_amp_les=args.tsr_amp_les)
     if args.post:
-        post_process()
+        post_process(parallel=not args.serial)
