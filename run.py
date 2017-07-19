@@ -271,9 +271,6 @@ if __name__ == "__main__":
                         help="Clean case automatically before running")
     args = parser.parse_args()
 
-    if args.overwrite:
-        foampy.clean(remove_zero=True)
-
     if args.param_sweep:
         param_sweep(args.param_sweep, args.start, args.stop, args.step,
                     append=args.append, parallel=not args.serial,
@@ -286,4 +283,5 @@ if __name__ == "__main__":
             les=args.les, nx_les=args.nx_les, dt_les=args.dt_les,
             tsr_amp_les=args.tsr_amp_les)
     if args.post:
-        post_process(parallel=not args.serial)
+        post_process(parallel=not args.serial, tee=args.tee,
+                     overwrite=args.overwrite)
