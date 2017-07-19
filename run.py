@@ -133,6 +133,9 @@ def post_process(parallel=False, tee=False, overwrite=True):
     foampy.run("postProcess", args="-dict system/controlDict.recovery "
                " -latestTime", parallel=parallel, logname="log.recovery",
                tee=tee, overwrite=overwrite)
+    foampy.run("postProcess", args="-func sets -latestTime",
+               logname="log.sample", parallel=parallel, overwrite=overwrite,
+               tee=tee)
     foampy.run("funkyDoCalc", args="system/funkyDoCalcDict -latestTime",
                parallel=parallel, tee=tee, overwrite=overwrite)
 
