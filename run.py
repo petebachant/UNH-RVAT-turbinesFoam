@@ -202,15 +202,15 @@ def run(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4, nx=48, mesh=True, parallel=False,
         nx = nx_les
         dt = dt_les
         tsr_amp = tsr_amp_les
-        foampy.fill_template("constant/turbulenceProperties.template",
-                             turbulence="LES")
+        foampy.gen_from_template_dir("constant/turbulenceProperties",
+                                     turbulence="LES")
         subprocess.call("cp system/snappyHexMeshDict.LES "
                         "system/snappyHexMeshDict", shell=True)
         foampy.fill_template("system/decomposeParDict.template",
                              nproc=4, nx=1, ny=2, nz=2)
     else:
-        foampy.fill_template("constant/turbulenceProperties.template",
-                             turbulence="RAS")
+        foampy.gen_from_template_dir("constant/turbulenceProperties",
+                                     turbulence="RAS")
         subprocess.call("cp system/snappyHexMeshDict.RAS "
                         "system/snappyHexMeshDict", shell=True)
         foampy.fill_template("system/decomposeParDict.template",
