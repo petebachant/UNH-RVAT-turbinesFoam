@@ -59,7 +59,7 @@ def set_blockmesh_resolution(nx=48, ny=None, nz=None):
     foampy.fill_template("system/blockMeshDict.template", nx=nx, ny=ny, nz=nz)
 
 
-def set_dt(dt=0.005, tsr=None, tsr_0=1.9, les=False):
+def set_dt(dt=0.005, tsr=None, tsr_0=1.9, write_interval=None, les=False):
     """Set ``deltaT`` in ``controlDict``. Will scale proportionally if ``tsr``
     and ``tsr_0`` are supplied, such that steps-per-rev is consistent with
     ``tsr_0``.
@@ -68,10 +68,11 @@ def set_dt(dt=0.005, tsr=None, tsr_0=1.9, les=False):
         dt = dt*tsr_0/tsr
         print("Setting deltaT = dt*tsr_0/tsr = {:.3f}".format(dt))
     dt = str(dt)
-    if les:
-        write_interval = 0.01
-    else:
-        write_interval = 0.05
+    if write_interval is None:
+        if les:
+            write_interval = 0.01
+        else:
+            write_interval = 0.05
     foampy.fill_template("system/controlDict.template", dt=dt,
                          write_interval=write_interval)
 
@@ -196,7 +197,7 @@ def set_turbine_params(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4, les=False):
 
 def run(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4, nx=48, mesh=True, parallel=False,
         dt=0.005, tee=False, reconstruct=True, overwrite=False, post=True,
-        les=False, nx_les=59, dt_les=0.002, tsr_amp_les=0.19):
+        les=False, nx_les=59, dt_les=0.002, tsr_amp_les=0.19, write_interval=None):
     """Run simulation once."""
     if les:
         nx = nx_les
@@ -217,7 +218,7 @@ def run(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4, nx=48, mesh=True, parallel=False,
                              nproc=2, nx=1, ny=1, nz=2)
     print("Setting TSR to", tsr)
     set_turbine_params(tsr=tsr, tsr_amp=tsr_amp, tsr_phase=tsr_phase, les=les)
-    set_dt(dt=dt, tsr=tsr, les=les)
+    set_dt(dt=dt, tsr=tsr, les=les, write_interval=write_interval)
     if mesh:
         # Create blockMeshDict
         set_blockmesh_resolution(nx=nx)
@@ -247,6 +248,7 @@ if __name__ == "__main__":
     parser.add_argument("--nx", "-x", default=48, type=int, help="Number of "
                         "cells in the x-direction for the base mesh")
     parser.add_argument("--dt", default=0.005, type=float, help="Time step")
+    parser.add_argument("--write-interval", "-w", type=float, help="Write interval")
     parser.add_argument("--les", "-L", default=False, action="store_true",
                         help="Run LES instead of RANS")
     parser.add_argument("--nx-les", default=59, type=int, help="Number of "
@@ -279,12 +281,12 @@ if __name__ == "__main__":
                     append=args.append, parallel=not args.serial,
                     tee=args.tee, nx=args.nx, dt=args.dt, tsr=args.tsr,
                     les=args.les, nx_les=args.nx_les, dt_les=args.dt_les,
-                    tsr_amp_les=0.0)
+                    tsr_amp_les=0.0, write_interval=args.write_interval)
     elif not args.post:
         run(tsr=args.tsr, nx=args.nx, dt=args.dt, parallel=not args.serial,
             tee=args.tee, mesh=not args.leave_mesh, overwrite=args.leave_mesh,
             les=args.les, nx_les=args.nx_les, dt_les=args.dt_les,
-            tsr_amp_les=args.tsr_amp_les)
+            tsr_amp_les=args.tsr_amp_les, write_interval=args.write_interval)
     if args.post:
         post_process(parallel=not args.serial, tee=args.tee,
                      overwrite=args.overwrite)
