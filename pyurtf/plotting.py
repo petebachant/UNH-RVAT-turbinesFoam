@@ -49,7 +49,6 @@ def plot_meancontquiv(save=False, show=False,
         cb = plt.colorbar(cs, shrink=1, extend="both",
                           orientation="vertical", pad=0.02)
     cb.set_label(r"$U/U_{\infty}$")
-    plt.hold(True)
     # Make quiver plot of v and w velocities
     Q = plt.quiver(y_R, z_H, mean_v, mean_w, width=0.0022,
                    edgecolor="none", scale=3.0)
