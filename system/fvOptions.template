@@ -67,7 +67,7 @@ turbine
             {{
                 writePerf   true;
                 nElements   {n_blade_elements};
-                endEffects  off;
+                endEffects  on;
                 elementProfiles (NACA0020);
                 elementData
                 ( // axialDistance, radius, azimuth, chord, chordMount, pitch
