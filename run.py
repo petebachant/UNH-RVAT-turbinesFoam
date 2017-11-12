@@ -82,7 +82,7 @@ def set_talpha(val=6.25):
     foampy.dictionaries.replace_value("system/fvOptions", "TAlpha", str(val))
 
 
-def gen_sets_file():
+def gen_sets_file(ny=51, nz=19):
     """Generate ``sets`` file for post-processing."""
     # Input parameters
     setformat = "raw"
@@ -91,10 +91,8 @@ def gen_sets_file():
     x = 1.0
     ymax = 1.5
     ymin = -1.5
-    ny = 51
     zmax = 1.125
     zmin = -1.125
-    nz = 19
     z_array = np.linspace(zmin, zmax, nz)
     txt = "\ntype sets;\n"
     txt +='libs ("libsampling.so");\n'
