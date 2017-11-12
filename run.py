@@ -124,7 +124,7 @@ def gen_sets_file(ny=51, nz=19):
         f.write(txt)
 
 
-def post_process(parallel=False, tee=False, overwrite=True):
+def post_process(parallel=False, tee=False, reconstruct=False, overwrite=True):
     """Execute all post-processing."""
     gen_sets_file()
     foampy.run("postProcess", args="-func -vorticity", parallel=parallel,
@@ -132,11 +132,15 @@ def post_process(parallel=False, tee=False, overwrite=True):
     foampy.run("postProcess", args="-dict system/controlDict.recovery "
                " -latestTime", parallel=parallel, logname="log.recovery",
                tee=tee, overwrite=overwrite)
-    foampy.run("postProcess", args="-func sets -latestTime",
-               logname="log.sample", parallel=parallel, overwrite=overwrite,
-               tee=tee)
     foampy.run("funkyDoCalc", args="system/funkyDoCalcDict -latestTime",
                parallel=parallel, tee=tee, overwrite=overwrite)
+    # Reconstruct if necessary so sampling isn't run in parallel
+    if reconstruct:
+        foampy.run("reconstructPar", args="-latestTime", overwrite=overwrite,
+                   logname="log.reconstructPar-latestTime", tee=tee)
+    foampy.run("postProcess", args="-func sets -latestTime",
+               logname="log.sample", parallel=False, overwrite=overwrite,
+               tee=tee)
 
 
 def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
@@ -237,7 +241,8 @@ def run(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4, nx=48, mesh=True, parallel=False,
     if parallel and reconstruct:
         foampy.run("reconstructPar", tee=tee, overwrite=overwrite)
     if post:
-        post_process(overwrite=overwrite, parallel=parallel)
+        post_process(overwrite=overwrite, parallel=parallel,
+                     reconstruct=not reconstruct)
 
 
 if __name__ == "__main__":
