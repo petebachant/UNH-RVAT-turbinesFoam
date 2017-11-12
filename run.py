@@ -143,7 +143,7 @@ def param_sweep(param="tsr", start=None, stop=None, step=None, dtype=float,
                 append=False, parallel=True, tee=False, **kwargs):
     """Run multiple simulations, varying ``param``.
 
-    ``step`` is not included.
+    ``stop`` is not included.
     """
     print("Running {} sweep".format(param))
     fpath = "processed/{}_sweep.csv".format(param)
