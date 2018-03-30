@@ -59,7 +59,7 @@ def set_blockmesh_resolution(nx=48, ny=None, nz=None):
     foampy.fill_template("system/blockMeshDict.template", nx=nx, ny=ny, nz=nz)
 
 
-def set_dt(dt=0.005, tsr=None, tsr_0=1.9, write_interval=None, les=False):
+def set_dt(dt=0.01, tsr=None, tsr_0=1.9, write_interval=None, les=False):
     """Set ``deltaT`` in ``controlDict``. Will scale proportionally if ``tsr``
     and ``tsr_0`` are supplied, such that steps-per-rev is consistent with
     ``tsr_0``.
@@ -198,8 +198,9 @@ def set_turbine_params(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4, les=False):
 
 
 def run(tsr=1.9, tsr_amp=0.0, tsr_phase=1.4, nx=48, mesh=True, parallel=False,
-        dt=0.005, tee=False, reconstruct=True, overwrite=False, post=True,
-        les=False, nx_les=59, dt_les=0.002, tsr_amp_les=0.19, write_interval=None):
+        dt=0.01, tee=False, reconstruct=True, overwrite=False, post=True,
+        les=False, nx_les=59, dt_les=0.002, tsr_amp_les=0.19,
+        write_interval=None):
     """Run simulation once."""
     if les:
         nx = nx_les
@@ -250,7 +251,7 @@ if __name__ == "__main__":
     parser.add_argument("--tsr", "-t", default=1.9, type=float, help="TSR")
     parser.add_argument("--nx", "-x", default=48, type=int, help="Number of "
                         "cells in the x-direction for the base mesh")
-    parser.add_argument("--dt", default=0.005, type=float, help="Time step")
+    parser.add_argument("--dt", default=0.01, type=float, help="Time step")
     parser.add_argument("--write-interval", "-w", type=float, help="Write interval")
     parser.add_argument("--les", "-L", default=False, action="store_true",
                         help="Run LES instead of RANS")
