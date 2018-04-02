@@ -252,7 +252,8 @@ if __name__ == "__main__":
     parser.add_argument("--nx", "-x", default=48, type=int, help="Number of "
                         "cells in the x-direction for the base mesh")
     parser.add_argument("--dt", default=0.01, type=float, help="Time step")
-    parser.add_argument("--write-interval", "-w", type=float, help="Write interval")
+    parser.add_argument("--write-interval", "-w", type=float, help="Write "
+                        "interval")
     parser.add_argument("--les", "-L", default=False, action="store_true",
                         help="Run LES instead of RANS")
     parser.add_argument("--nx-les", default=59, type=int, help="Number of "
