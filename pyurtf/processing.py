@@ -163,7 +163,7 @@ def load_k_profile(z_H=0.0):
                           fname_k), unpack=True)
         df["k_modeled"] = data[1]
         df["k_total"] = df.k_modeled + df.k_resolved
-    except FileNotFoundError:
+    except (FileNotFoundError, OSError):
         df["k_modeled"] = np.zeros(len(df.y_R))*np.nan
         df["k_total"] = df.k_resolved
     return df
