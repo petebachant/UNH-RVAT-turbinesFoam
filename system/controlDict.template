@@ -57,6 +57,7 @@ functions
     {{
         type            turbulenceFields;
         functionObjectLibs ("libfieldFunctionObjects.so");
+        writeControl    outputTime;
         fields          (k);
     }}
 
