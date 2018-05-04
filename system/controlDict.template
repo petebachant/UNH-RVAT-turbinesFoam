@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  4.1                                   |
+|  \\    /   O peration     | Version:  5                                     |
 |   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -53,6 +53,13 @@ libs
 
 functions
 {{
+    turbulenceFields
+    {{
+        type            turbulenceFields;
+        functionObjectLibs ("libfieldFunctionObjects.so");
+        fields          (k);
+    }}
+
     fieldAverage
     {{
         type            fieldAverage;
@@ -87,6 +94,13 @@ functions
             }}
 
             k
+            {{
+                mean        on;
+                prime2Mean  off;
+                base        time;
+            }}
+
+            turbulenceProperties:k
             {{
                 mean        on;
                 prime2Mean  off;

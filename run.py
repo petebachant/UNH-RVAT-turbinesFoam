@@ -87,7 +87,7 @@ def gen_sets_file(ny=51, nz=19):
     # Input parameters
     setformat = "raw"
     interpscheme = "cellPoint"
-    fields = ["UMean", "UPrime2Mean", "kMean"]
+    fields = ["UMean", "UPrime2Mean", "kMean", "turbulenceProperties:kMean"]
     x = 1.0
     ymax = 1.5
     ymin = -1.5

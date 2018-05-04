@@ -8,6 +8,7 @@ import os
 import sys
 import foampy
 from pxl import fdiff, timeseries as ts
+import warnings
 import pandas as pd
 
 # Some constants
@@ -144,8 +145,7 @@ def load_vel_map(component="u"):
 
 
 def load_k_profile(z_H=0.0):
-    """
-    Loads data from the sampled `UPrime2Mean` and `kMean` (if available) and
+    """Load data from the sampled `UPrime2Mean` and `kMean` (if available) and
     returns it as a pandas `DataFrame`.
     """
     z_H = float(z_H)
@@ -154,6 +154,10 @@ def load_k_profile(z_H=0.0):
     latest_time = max(timedirs)
     fname_u = "profile_{}_UPrime2Mean.xy".format(z_H)
     fname_k = "profile_{}_kMean.xy".format(z_H)
+    fname_k_les = fname_k.replace("kMean", "turbulenceProperties:kMean")
+    if os.path.isfile(os.path.join("postProcessing", "sets", latest_time,
+                                   fname_k_les)):
+        fname_k = fname_k_les
     data = np.loadtxt(os.path.join("postProcessing", "sets", latest_time,
                       fname_u), unpack=True)
     df["y_R"] = data[0]/R
@@ -164,6 +168,7 @@ def load_k_profile(z_H=0.0):
         df["k_modeled"] = data[1]
         df["k_total"] = df.k_modeled + df.k_resolved
     except (FileNotFoundError, OSError):
+        warnings.warn("Modeled k not found for plotting")
         df["k_modeled"] = np.zeros(len(df.y_R))*np.nan
         df["k_total"] = df.k_resolved
     return df
