@@ -73,8 +73,12 @@ def set_dt(dt=0.01, tsr=None, tsr_0=1.9, write_interval=None, les=False):
             write_interval = 0.01
         else:
             write_interval = 0.05
-    foampy.fill_template("system/controlDict.template", dt=dt,
-                         write_interval=write_interval)
+    foampy.fill_template(
+        "system/controlDict.template",
+        dt=dt,
+        write_interval=write_interval,
+        turb_fields_enabled=str(les).lower(),
+    )
 
 
 def set_talpha(val=6.25):

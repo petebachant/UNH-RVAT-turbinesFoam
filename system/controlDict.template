@@ -59,6 +59,7 @@ functions
         functionObjectLibs ("libfieldFunctionObjects.so");
         writeControl    outputTime;
         fields          (k);
+        enabled         {turb_fields_enabled};
     }}
 
     fieldAverage
